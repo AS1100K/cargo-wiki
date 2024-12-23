@@ -24,7 +24,7 @@ pub struct Configuration {
     pub no_deps: bool,
     #[arg(short, long, value_enum, default_value_t = MarkdownFlavor::GitHub)]
     pub markdown_flavor: MarkdownFlavor,
-    // TODO: Add more arguments to support more feautures
+    // TODO: Add more arguments to support more features
     // refer: https://doc.rust-lang.org/cargo/commands/cargo-doc.html
     // refer: https://doc.rust-lang.org/cargo/commands/cargo-rustdoc.html
 }
@@ -72,7 +72,7 @@ pub fn generate_doc_for_entire_dir(configuration: Configuration) -> Result<()> {
         let file_type = entry.file_type();
 
         if let Ok(file_type) = file_type {
-            if file_type.is_file() {
+            if file_type.is_file() && entry.path().extension() == Some("json".as_ref()) {
                 let crate_type = Crate::from_file(&entry.path())?;
                 generate(&configuration, crate_type)?;
             }
