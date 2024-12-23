@@ -3,8 +3,8 @@ use std::process::Command;
 use crate::Configuration;
 
 pub fn generate_rust_doc(configuration: &Configuration) -> Result<()> {
+    // TODO: Modify the command based on the configuration
     let mut command = Command::new("cargo")
-        .arg("+nightly")
         .arg("rustdoc")
         .arg("-Zunstable-options")
         .arg("--output-format")
@@ -28,3 +28,4 @@ pub fn generate_rust_doc(configuration: &Configuration) -> Result<()> {
 
     Ok(())
 }
+
