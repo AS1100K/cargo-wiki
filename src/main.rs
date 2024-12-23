@@ -1,12 +1,11 @@
+use clap::Parser;
+use cargo_wiki::Configuration;
+use cargo_wiki::rust_doc::generate_rust_doc;
+
 fn main() {
-    let mut args = std::env::args().collect::<Vec<String>>();
+    let args = std::env::args().skip(2).collect::<Vec<String>>();
+    let configuration = Configuration::parse_from(args);
 
-    if args.len() < 2 {
-        panic!("Failed to get appropriate arguments for `cargo-wiki`. Make sure you have installed it correctly.")
-    }
-    args.drain(0..2);
-
-    for (i, arg) in args.iter().enumerate() {
-        println!("{} --{}", i, arg)
-    }
+    println!("{:#?}", configuration);
+    generate_rust_doc(&configuration).expect("Failed to generate rust doc");
 }
