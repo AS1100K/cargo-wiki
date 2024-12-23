@@ -1,0 +1,7 @@
+[package]
+name = "cargo-wiki"
+authors = ["Aditya Kumar <git@adityais.dev>"]
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
