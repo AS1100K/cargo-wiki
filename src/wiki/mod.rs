@@ -1,9 +1,9 @@
 pub mod generator;
 
+use anyhow::Result;
+use rustdoc_types::Crate;
 use std::fs;
 use std::path::Path;
-use rustdoc_types::Crate;
-use anyhow::Result;
 
 pub trait CrateExt {
     fn from_file<P: AsRef<Path>>(file: P) -> Result<Crate>;

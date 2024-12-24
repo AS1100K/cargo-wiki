@@ -1,4 +1,4 @@
-use crate::wiki::generator::generate;
+use crate::wiki::generator::generate_wiki;
 use crate::wiki::CrateExt;
 use anyhow::Result;
 use clap::{Parser, ValueEnum};
@@ -10,6 +10,7 @@ use std::path::Path;
 
 pub mod rust_doc;
 pub mod wiki;
+pub mod generators;
 
 #[derive(Parser, Debug)]
 #[command(name = "cargo wiki")]
@@ -40,13 +41,14 @@ pub enum MarkdownFlavor {
 }
 
 pub const WIKI_OUTPUT_PATH: &str = "target/wiki";
+pub const WIKI_CACHE_PATH: &str = "target/wiki_cache";
 
-pub fn generate_wiki_directory() -> Result<()> {
+pub fn gen_path(path: &str) -> Result<()> {
     let wiki_output_path =
         Path::new(&current_dir().expect(
             "Failed to get the current directory where the `cargo wiki` command is running.",
         ))
-        .join(WIKI_OUTPUT_PATH);
+        .join(path);
 
     if !wiki_output_path.exists() {
         create_dir_all(wiki_output_path)?
@@ -74,7 +76,7 @@ pub fn generate_doc_for_entire_dir(configuration: Configuration) -> Result<()> {
         if let Ok(file_type) = file_type {
             if file_type.is_file() && entry.path().extension() == Some("json".as_ref()) {
                 let crate_type = Crate::from_file(&entry.path())?;
-                generate(&configuration, crate_type)?;
+                generate_wiki(&configuration, crate_type)?;
             }
         } else {
             eprintln!("Failed to know the type of {:?}", entry.path());

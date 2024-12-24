@@ -1,5 +1,5 @@
 use cargo_wiki::rust_doc::generate_rust_doc;
-use cargo_wiki::{generate_doc_for_entire_dir, generate_wiki_directory, Configuration};
+use cargo_wiki::{generate_doc_for_entire_dir, gen_path, Configuration, WIKI_OUTPUT_PATH, WIKI_CACHE_PATH};
 use clap::{CommandFactory, Parser};
 
 fn main() {
@@ -13,7 +13,8 @@ fn main() {
     let configuration = Configuration::parse_from(&args[1..]);
     println!("{:#?}", configuration);
 
-    generate_wiki_directory().unwrap();
+    gen_path(WIKI_OUTPUT_PATH).unwrap();
+    gen_path(WIKI_CACHE_PATH).unwrap();
     generate_rust_doc(&configuration).expect("Failed to generate rust doc");
     generate_doc_for_entire_dir(configuration).unwrap();
 }
