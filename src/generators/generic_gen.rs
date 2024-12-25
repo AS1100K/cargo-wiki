@@ -52,7 +52,7 @@ impl GenericGenerator {
 
                 match &param_def.kind {
                     GenericParamDefKind::Lifetime { outlives } => {
-                        params.push_str("'");
+                        // name already contains '
                         params.push_str(&param_def.name);
 
                         if outlives.len() > 0 {

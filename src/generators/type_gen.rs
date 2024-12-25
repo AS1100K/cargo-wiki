@@ -58,7 +58,6 @@ impl TypeGenerator {
             Type::BorrowedRef { lifetime, is_mutable, type_ } => {
                 type_string.push_str("&");
                 if let Some(lifetime) = lifetime {
-                    type_string.push_str("'");
                     type_string.push_str(lifetime);
                     type_string.push_str(" ");
                 }
