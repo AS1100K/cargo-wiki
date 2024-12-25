@@ -1,6 +1,8 @@
-use rustdoc_types::{GenericBound, GenericParamDef, GenericParamDefKind, Generics, Type, WherePredicate};
-use anyhow::Result;
 use crate::generators::type_gen::TypeGenerator;
+use anyhow::Result;
+use rustdoc_types::{
+    GenericBound, GenericParamDef, GenericParamDefKind, Generics, Type, WherePredicate,
+};
 
 pub struct GenericGenerator;
 
@@ -18,13 +20,19 @@ impl GenericGenerator {
                 }
 
                 match where_pred {
-                    WherePredicate::BoundPredicate { type_, bounds, generic_params } => {
+                    WherePredicate::BoundPredicate {
+                        type_,
+                        bounds,
+                        generic_params,
+                    } => {
                         if let Type::Generic(type_name) = type_ {
                             let generic_params = Self::generate_generic_params(generic_params)?;
                             // TODO
                         }
 
-                        return Err(anyhow::Error::msg("Only Generic Types are allowed in Where Predicate type_"))
+                        return Err(anyhow::Error::msg(
+                            "Only Generic Types are allowed in Where Predicate type_",
+                        ));
                     }
                     WherePredicate::LifetimePredicate { lifetime, outlives } => {
                         // TODO
@@ -108,11 +116,14 @@ impl GenericGenerator {
     pub fn generate_generic_bounds(bound: &GenericBound) -> Result<String> {
         let mut bound_string = String::new();
         match bound {
-            GenericBound::TraitBound { trait_, generic_params, modifier } => {
+            GenericBound::TraitBound {
+                trait_,
+                generic_params,
+                modifier,
+            } => {
                 // TODO
             }
             GenericBound::Outlives(lifetime) => {
-                bound_string.push_str("'");
                 bound_string.push_str(lifetime);
             }
             GenericBound::Use(uses) => {

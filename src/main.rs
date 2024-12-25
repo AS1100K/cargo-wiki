@@ -1,5 +1,7 @@
 use cargo_wiki::rust_doc::generate_rust_doc;
-use cargo_wiki::{generate_doc_for_entire_dir, gen_path, Configuration, WIKI_OUTPUT_PATH, WIKI_CACHE_PATH};
+use cargo_wiki::{
+    gen_path, generate_doc_for_entire_dir, Configuration, WIKI_CACHE_PATH, WIKI_OUTPUT_PATH,
+};
 use clap::{CommandFactory, Parser};
 
 fn main() {

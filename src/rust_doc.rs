@@ -1,6 +1,6 @@
+use crate::Configuration;
 use anyhow::Result;
 use std::process::Command;
-use crate::Configuration;
 
 pub fn generate_rust_doc(configuration: &Configuration) -> Result<()> {
     // TODO: Modify the command based on the configuration
@@ -28,4 +28,3 @@ pub fn generate_rust_doc(configuration: &Configuration) -> Result<()> {
 
     Ok(())
 }
-

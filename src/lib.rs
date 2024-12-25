@@ -8,9 +8,9 @@ use std::fs;
 use std::fs::create_dir_all;
 use std::path::Path;
 
+pub mod generators;
 pub mod rust_doc;
 pub mod wiki;
-pub mod generators;
 
 #[derive(Parser, Debug)]
 #[command(name = "cargo wiki")]

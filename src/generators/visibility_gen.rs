@@ -7,7 +7,7 @@ impl VisibilityGenerator {
         let mut visibility_string = String::new();
         match visibility {
             Visibility::Public => visibility_string.push_str("pub "),
-            Visibility::Default => {},
+            Visibility::Default => {}
             Visibility::Crate => visibility_string.push_str("pub(crate) "),
             Visibility::Restricted { parent, path } => {
                 // TODO: Utilize parent
