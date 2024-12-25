@@ -133,8 +133,7 @@ impl GenericGenerator {
                 bound_string.push_str(&Self::generate_generic_params(generic_params)?);
                 bound_string.push_str(" ");
 
-                // TODO: Resolve Path completely
-                bound_string.push_str(&trait_.name);
+                bound_string.push_str(&TypeGenerator::path_to_string(&trait_));
             }
             GenericBound::Outlives(lifetime) => {
                 bound_string.push_str(lifetime);
@@ -151,5 +150,56 @@ impl GenericGenerator {
             }
         }
         Ok(bound_string)
+    }
+
+    pub fn generate_generic_args(generic_args: &GenericArgs) -> String {
+        let mut generic_arg_string = String::new();
+
+        match generic_args {
+            GenericArgs::AngleBracketed { args, constraints } => {
+                generic_arg_string.push_str("<");
+
+                for (i, arg) in args.iter().enumerate() {
+                    if i != 0 {
+                        generic_arg_string.push_str(", ");
+                    }
+
+                    match arg {
+                        GenericArg::Lifetime(lifetime) => generic_arg_string.push_str(lifetime),
+                        GenericArg::Type(type_) => {
+                            generic_arg_string.push_str(&TypeGenerator::type_to_string(type_))
+                        }
+                        // TODO: Account for other variables in constant i.e. value and is_literal
+                        GenericArg::Const(constant) => {
+                            generic_arg_string.push_str(&format!("{{ {} }}", constant.expr))
+                        }
+                        GenericArg::Infer => generic_arg_string.push_str("_"),
+                    }
+
+                    // TODO: Also, account for constraints
+                }
+
+                generic_arg_string.push_str(">");
+            }
+            GenericArgs::Parenthesized { inputs, output } => {
+                generic_arg_string.push_str("Fn(");
+
+                for (i, input) in inputs.iter().enumerate() {
+                    if i != 0 {
+                        generic_arg_string.push_str(", ");
+                    }
+                    generic_arg_string.push_str(&TypeGenerator::type_to_string(input));
+                }
+
+                generic_arg_string.push_str(")");
+
+                if let Some(type_) = output {
+                    generic_arg_string.push_str(" -> ");
+                    generic_arg_string.push_str(&TypeGenerator::type_to_string(type_));
+                }
+            }
+        }
+
+        generic_arg_string
     }
 }

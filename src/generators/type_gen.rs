@@ -1,3 +1,4 @@
+use crate::generators::generic_gen::GenericGenerator;
 use rustdoc_types::{DynTrait, Path, Type};
 
 pub struct TypeGenerator;
@@ -6,10 +7,7 @@ impl TypeGenerator {
     pub fn type_to_string(type_: &Type) -> String {
         let mut type_string = String::new();
         match type_ {
-            Type::ResolvedPath(Path { name, args, id }) => {
-                type_string.push_str(name);
-                // TODO: parse args
-            }
+            Type::ResolvedPath(path) => type_string.push_str(&Self::path_to_string(&path)),
             Type::DynTrait(DynTrait { traits, lifetime }) => {
                 // TODO
             }
@@ -76,5 +74,17 @@ impl TypeGenerator {
         }
 
         type_string
+    }
+
+    pub fn path_to_string(path: &Path) -> String {
+        let mut path_string = String::new();
+
+        path_string.push_str(&path.name);
+
+        if let Some(args) = &path.args {
+            path_string.push_str(&GenericGenerator::generate_generic_args(args));
+        }
+
+        path_string
     }
 }
