@@ -1,5 +1,6 @@
-use rustdoc_types::{GenericParamDef, GenericParamDefKind, Generics, Type, WherePredicate};
+use rustdoc_types::{GenericBound, GenericParamDef, GenericParamDefKind, Generics, Type, WherePredicate};
 use anyhow::Result;
+use crate::generators::type_gen::TypeGenerator;
 
 pub struct GenericGenerator;
 
@@ -71,20 +72,30 @@ impl GenericGenerator {
                         default,
                         is_synthetic,
                     } => {
+                        params.push_str(&param_def.name);
                         if let Some(default_type) = default {
-                            params.push_str(&param_def.name);
                             params.push_str(" = ");
-                            // TODO: params.push_str(&default_type);
+                            params.push_str(&TypeGenerator::type_to_string(default_type));
                         } else {
-                            for bound in bounds {
-                                // TODO
+                            for (i, bound) in bounds.iter().enumerate() {
+                                if i != 0 {
+                                    params.push_str(" + ");
+                                }
+                                params.push_str(&Self::generate_generic_bounds(bound)?);
                             }
                         }
+                        // TODO use `is_synthetic` field
                     }
                     GenericParamDefKind::Const { type_, default } => {
+                        params.push_str("const ");
                         params.push_str(&param_def.name);
-                        params.push_str(" = ");
-                        // TODO: Param Type
+                        if let Some(default) = default {
+                            params.push_str(" = ");
+                            params.push_str(default);
+                        } else {
+                            params.push_str(": ");
+                            params.push_str(&TypeGenerator::type_to_string(type_));
+                        }
                     }
                 }
             }
@@ -92,5 +103,29 @@ impl GenericGenerator {
         }
 
         Ok(params)
+    }
+
+    pub fn generate_generic_bounds(bound: &GenericBound) -> Result<String> {
+        let mut bound_string = String::new();
+        match bound {
+            GenericBound::TraitBound { trait_, generic_params, modifier } => {
+                // TODO
+            }
+            GenericBound::Outlives(lifetime) => {
+                bound_string.push_str("'");
+                bound_string.push_str(lifetime);
+            }
+            GenericBound::Use(uses) => {
+                bound_string.push_str("use<");
+                for (i, use_) in uses.iter().enumerate() {
+                    if i != 0 {
+                        bound_string.push_str(", ");
+                    }
+                    bound_string.push_str(use_);
+                }
+                bound_string.push_str(">");
+            }
+        }
+        Ok(bound_string)
     }
 }
