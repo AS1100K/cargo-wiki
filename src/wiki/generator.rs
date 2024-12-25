@@ -12,7 +12,8 @@ pub fn generate_wiki(configuration: &Configuration, crate_type: Crate) -> Result
 
     for (id, item) in &crate_type.index {
         if let Some(name) = item.name.as_ref() {
-            let path = format!("{}/{}.md", path, id.0);
+            // TODO: Nest files under module if available
+            let mut path = format!("{}/", path);
 
             let item_name = name;
             let mut file_content = String::from("# ");
@@ -25,6 +26,8 @@ pub fn generate_wiki(configuration: &Configuration, crate_type: Crate) -> Result
                     generics,
                     impls,
                 }) => {
+                    path.push_str("struct.");
+                    path.push_str(item_name);
                     let syntax = StructGenerator::generate_syntax(
                         &item,
                         &crate_type.index,
@@ -35,6 +38,7 @@ pub fn generate_wiki(configuration: &Configuration, crate_type: Crate) -> Result
                 }
                 _ => continue,
             }
+            path.push_str(".md");
             fs::write(path, file_content).expect("TODO: panic message");
         }
     }
