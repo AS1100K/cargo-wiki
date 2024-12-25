@@ -48,7 +48,7 @@ impl TypeGenerator {
             }
             Type::Infer => { type_string.push_str("_") }
             Type::RawPointer { is_mutable, type_ } => {
-                if is_mutable {
+                if *is_mutable {
                     type_string.push_str("*mut ");
                 } else {
                     type_string.push_str("*const ");
@@ -62,7 +62,7 @@ impl TypeGenerator {
                     type_string.push_str(lifetime);
                     type_string.push_str(" ");
                 }
-                if is_mutable {
+                if *is_mutable {
                     type_string.push_str("mut ");
                 }
                 type_string.push_str(&Self::type_to_string(type_));
