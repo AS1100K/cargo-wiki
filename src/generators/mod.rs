@@ -5,6 +5,7 @@ use std::collections::HashMap;
 pub mod generic_gen;
 pub mod struct_gen;
 pub mod type_gen;
+pub mod visibility_gen;
 
 pub type Index = HashMap<Id, Item>;
 pub type Paths = HashMap<Id, ItemSummary>;

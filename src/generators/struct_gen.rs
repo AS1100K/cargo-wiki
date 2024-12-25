@@ -1,7 +1,8 @@
+use crate::generators::generic_gen::GenericGenerator;
+use crate::generators::visibility_gen::VisibilityGenerator;
 use crate::generators::{ExternalCrates, Generator, Index, Paths};
 use anyhow::Result;
-use rustdoc_types::{Item, ItemEnum, StructKind, Visibility};
-use crate::generators::generic_gen::GenericGenerator;
+use rustdoc_types::{Item, ItemEnum, StructKind};
 
 pub struct StructGenerator;
 
@@ -21,17 +22,7 @@ impl Generator for StructGenerator {
         }) = &item.inner
         {
             let mut syntax = String::from("```rust\n");
-            match &item.visibility {
-                Visibility::Public => syntax.push_str("pub "),
-                Visibility::Default => {},
-                Visibility::Crate => syntax.push_str("pub(crate) "),
-                Visibility::Restricted { parent, path } => {
-                    // TODO: Utilize parent
-                    syntax.push_str("pub(");
-                    syntax.push_str(path);
-                    syntax.push_str(") ");
-                }
-            }
+            syntax.push_str(&VisibilityGenerator::generate_visibility(&item.visibility));
             syntax.push_str("struct ");
 
             if let Some(struct_name) = &item.name {
