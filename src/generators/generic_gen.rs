@@ -1,7 +1,8 @@
 use crate::generators::type_gen::TypeGenerator;
 use anyhow::Result;
 use rustdoc_types::{
-    GenericBound, GenericParamDef, GenericParamDefKind, Generics, Type, WherePredicate,
+    GenericArg, GenericArgs, GenericBound, GenericParamDef, GenericParamDefKind, Generics,
+    TraitBoundModifier, Type, WherePredicate,
 };
 
 pub struct GenericGenerator;
@@ -121,7 +122,19 @@ impl GenericGenerator {
                 generic_params,
                 modifier,
             } => {
-                // TODO
+                bound_string.push_str(match modifier {
+                    TraitBoundModifier::None => "",
+                    TraitBoundModifier::Maybe => "?",
+                    // Not really sure if this is correct
+                    TraitBoundModifier::MaybeConst => "const? ",
+                });
+
+                bound_string.push_str("for");
+                bound_string.push_str(&Self::generate_generic_params(generic_params)?);
+                bound_string.push_str(" ");
+
+                // TODO: Resolve Path completely
+                bound_string.push_str(&trait_.name);
             }
             GenericBound::Outlives(lifetime) => {
                 bound_string.push_str(lifetime);
