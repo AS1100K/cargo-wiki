@@ -1,7 +1,7 @@
 use crate::generators::type_gen::TypeGenerator;
 use anyhow::Result;
 use rustdoc_types::{
-    GenericArg, GenericArgs, GenericBound, GenericParamDef, GenericParamDefKind, Generics,
+    GenericArg, GenericArgs, GenericBound, GenericParamDef, GenericParamDefKind, Generics, Term,
     TraitBoundModifier, Type, WherePredicate,
 };
 
@@ -17,7 +17,7 @@ impl GenericGenerator {
 
             for (i, where_pred) in generics.where_predicates.iter().enumerate() {
                 if i != 0 {
-                    where_predicates.push_str(",\n");
+                    where_predicates.push_str(",\n\t");
                 }
 
                 match where_pred {
@@ -28,7 +28,26 @@ impl GenericGenerator {
                     } => {
                         if let Type::Generic(type_name) = type_ {
                             let generic_params = Self::generate_generic_params(generic_params)?;
-                            // TODO
+
+                            if !generic_params.is_empty() {
+                                where_predicates.push_str("for");
+                                where_predicates.push_str(&generic_params);
+                                where_predicates.push_str(" ");
+                            }
+                            where_predicates.push_str(type_name);
+
+                            if bounds.len() > 0 {
+                                where_predicates.push_str(": ");
+
+                                for (i, bound) in bounds.iter().enumerate() {
+                                    if i != 0 {
+                                        where_predicates.push_str(" + ");
+                                    }
+
+                                    where_predicates
+                                        .push_str(&Self::generate_generic_bounds(bound)?)
+                                }
+                            }
                         }
 
                         return Err(anyhow::Error::msg(
@@ -36,10 +55,29 @@ impl GenericGenerator {
                         ));
                     }
                     WherePredicate::LifetimePredicate { lifetime, outlives } => {
-                        // TODO
+                        where_predicates.push_str(lifetime);
+
+                        if outlives.len() > 0 {
+                            where_predicates.push_str(": ");
+
+                            for (i, outlive) in outlives.iter().enumerate() {
+                                if i != 0 {
+                                    where_predicates.push_str(" + ");
+                                    where_predicates.push_str(outlive);
+                                }
+                            }
+                        }
                     }
                     WherePredicate::EqPredicate { lhs, rhs } => {
-                        // TODO
+                        where_predicates.push_str(&TypeGenerator::type_to_string(lhs));
+                        where_predicates.push_str(" = ");
+
+                        let rhs = match rhs {
+                            Term::Type(type_) => TypeGenerator::type_to_string(type_),
+                            Term::Constant(constant) => unimplemented!(),
+                        };
+
+                        where_predicates.push_str(&rhs)
                     }
                 }
             }
@@ -82,16 +120,19 @@ impl GenericGenerator {
                         is_synthetic,
                     } => {
                         params.push_str(&param_def.name);
-                        if let Some(default_type) = default {
-                            params.push_str(" = ");
-                            params.push_str(&TypeGenerator::type_to_string(default_type));
-                        } else {
+                        if bounds.len() > 0 {
+                            params.push_str(": ");
                             for (i, bound) in bounds.iter().enumerate() {
                                 if i != 0 {
                                     params.push_str(" + ");
                                 }
                                 params.push_str(&Self::generate_generic_bounds(bound)?);
                             }
+                        }
+
+                        if let Some(default_type) = default {
+                            params.push_str(" = ");
+                            params.push_str(&TypeGenerator::type_to_string(default_type));
                         }
                         // TODO use `is_synthetic` field
                     }
@@ -129,9 +170,12 @@ impl GenericGenerator {
                     TraitBoundModifier::MaybeConst => "const? ",
                 });
 
-                bound_string.push_str("for");
-                bound_string.push_str(&Self::generate_generic_params(generic_params)?);
-                bound_string.push_str(" ");
+                let param = Self::generate_generic_params(generic_params)?;
+                if !param.is_empty() {
+                    bound_string.push_str("for");
+                    bound_string.push_str(&param);
+                    bound_string.push_str(" ");
+                }
 
                 bound_string.push_str(&TypeGenerator::path_to_string(&trait_));
             }
