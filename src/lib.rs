@@ -1,3 +1,5 @@
+#![feature(more_maybe_bounds)]
+
 use crate::wiki::generator::generate_wiki;
 use crate::wiki::CrateExt;
 use anyhow::Result;
@@ -8,6 +10,8 @@ use std::fs;
 use std::fs::create_dir_all;
 use std::path::Path;
 
+#[cfg(feature = "doc_examples")]
+pub mod _examples;
 pub mod generators;
 pub mod rust_doc;
 pub mod wiki;
