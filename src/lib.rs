@@ -1,4 +1,5 @@
-#![feature(more_maybe_bounds)]
+// Uncomment it when you are generating doc with feature `doc_examples`
+// #![feature(more_maybe_bounds)]
 
 use crate::wiki::generator::generate_wiki;
 use crate::wiki::CrateExt;
