@@ -31,6 +31,8 @@ impl Generator for StructGenerator {
                     GenericGenerator::generate_generics(&generics)?;
                 syntax.push_str(struct_name);
                 syntax.push_str(&generic_params);
+                syntax.push_str(&where_predicates);
+
                 match kind {
                     StructKind::Unit => {
                         syntax.push_str(";");
@@ -63,7 +65,12 @@ impl Generator for StructGenerator {
                         fields,
                         has_stripped_fields,
                     } => {
-                        syntax.push_str(" {\n");
+                        if where_predicates.is_empty() {
+                            syntax.push_str(" {\n");
+                        } else {
+                            syntax.push_str("\n{")
+                        }
+
                         for field_id in fields {
                             let Some(field_item) = index.get(field_id) else {
                                 return Err(anyhow::Error::msg(format!(
@@ -97,7 +104,6 @@ impl Generator for StructGenerator {
                         syntax.push_str("}");
                     }
                 }
-                syntax.push_str(&where_predicates);
                 syntax.push_str("\n```\n");
                 return Ok(syntax);
             }

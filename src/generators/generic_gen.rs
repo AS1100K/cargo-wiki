@@ -13,7 +13,7 @@ impl GenericGenerator {
         let mut where_predicates = String::new();
 
         if generics.where_predicates.len() > 0 {
-            where_predicates.push_str("\nwhere\n");
+            where_predicates.push_str("\nwhere\n\t");
 
             for (i, where_pred) in generics.where_predicates.iter().enumerate() {
                 if i != 0 {
@@ -26,33 +26,26 @@ impl GenericGenerator {
                         bounds,
                         generic_params,
                     } => {
-                        if let Type::Generic(type_name) = type_ {
-                            let generic_params = Self::generate_generic_params(generic_params)?;
+                        let generic_params = Self::generate_generic_params(generic_params)?;
 
-                            if !generic_params.is_empty() {
-                                where_predicates.push_str("for");
-                                where_predicates.push_str(&generic_params);
-                                where_predicates.push_str(" ");
-                            }
-                            where_predicates.push_str(type_name);
+                        if !generic_params.is_empty() {
+                            where_predicates.push_str("for");
+                            where_predicates.push_str(&generic_params);
+                            where_predicates.push_str(" ");
+                        }
+                        where_predicates.push_str(&TypeGenerator::type_to_string(type_));
 
-                            if bounds.len() > 0 {
-                                where_predicates.push_str(": ");
+                        if bounds.len() > 0 {
+                            where_predicates.push_str(": ");
 
-                                for (i, bound) in bounds.iter().enumerate() {
-                                    if i != 0 {
-                                        where_predicates.push_str(" + ");
-                                    }
-
-                                    where_predicates
-                                        .push_str(&Self::generate_generic_bounds(bound)?)
+                            for (i, bound) in bounds.iter().enumerate() {
+                                if i != 0 {
+                                    where_predicates.push_str(" + ");
                                 }
+
+                                where_predicates.push_str(&Self::generate_generic_bounds(bound)?)
                             }
                         }
-
-                        return Err(anyhow::Error::msg(
-                            "Only Generic Types are allowed in Where Predicate type_",
-                        ));
                     }
                     WherePredicate::LifetimePredicate { lifetime, outlives } => {
                         where_predicates.push_str(lifetime);
