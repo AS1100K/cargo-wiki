@@ -15,10 +15,23 @@ pub mod wiki;
 #[derive(Parser, Debug)]
 #[command(name = "cargo wiki")]
 pub struct Configuration {
-    #[arg(short, long, default_value_t = String::from(""))]
+    /// The package to document. See [cargo-pkgid](https://doc.rust-lang.org/cargo/commands/cargo-pkgid.html)
+    /// for the SPEC format.
+    #[arg(short, long, default_value_t = String::new())]
     pub package: String,
     #[arg(long, default_value_t = false)]
     pub workspace: bool,
+    /// Space or comma separated list of features to activate. Features of workspace members may be
+    /// enabled with package-name/feature-name syntax. This flag may be specified multiple times,
+    /// which enables all specified features.
+    #[arg(short, long, default_value_t = String::new())]
+    pub features: String,
+    /// Activate all available features of all selected packages.
+    #[arg(long, default_value_t = false)]
+    pub all_features: bool,
+    /// Do not activate the default feature of the selected packages.
+    #[arg(long, default_value_t = false)]
+    pub no_default_features: bool,
     #[arg(long, default_value_t = false)]
     pub document_private_items: bool,
     #[arg(long, default_value_t = false)]
