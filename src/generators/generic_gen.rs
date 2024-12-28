@@ -157,29 +157,31 @@ impl GenericGenerator {
 
         match generic_args {
             GenericArgs::AngleBracketed { args, constraints } => {
-                generic_arg_string.push_str("<");
+                if args.len() > 0 {
+                    generic_arg_string.push_str("<");
 
-                for (i, arg) in args.iter().enumerate() {
-                    if i != 0 {
-                        generic_arg_string.push_str(", ");
+                    for (i, arg) in args.iter().enumerate() {
+                        if i != 0 {
+                            generic_arg_string.push_str(", ");
+                        }
+
+                        match arg {
+                            GenericArg::Lifetime(lifetime) => generic_arg_string.push_str(lifetime),
+                            GenericArg::Type(type_) => {
+                                generic_arg_string.push_str(&TypeGenerator::type_to_string(type_))
+                            }
+                            // TODO: Account for other variables in constant i.e. value and is_literal
+                            GenericArg::Const(constant) => {
+                                generic_arg_string.push_str(&format!("{{ {} }}", constant.expr))
+                            }
+                            GenericArg::Infer => generic_arg_string.push_str("_"),
+                        }
+
+                        // TODO: Also, account for constraints
                     }
 
-                    match arg {
-                        GenericArg::Lifetime(lifetime) => generic_arg_string.push_str(lifetime),
-                        GenericArg::Type(type_) => {
-                            generic_arg_string.push_str(&TypeGenerator::type_to_string(type_))
-                        }
-                        // TODO: Account for other variables in constant i.e. value and is_literal
-                        GenericArg::Const(constant) => {
-                            generic_arg_string.push_str(&format!("{{ {} }}", constant.expr))
-                        }
-                        GenericArg::Infer => generic_arg_string.push_str("_"),
-                    }
-
-                    // TODO: Also, account for constraints
+                    generic_arg_string.push_str(">");
                 }
-
-                generic_arg_string.push_str(">");
             }
             GenericArgs::Parenthesized { inputs, output } => {
                 generic_arg_string.push_str("Fn(");
