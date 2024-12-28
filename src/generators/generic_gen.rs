@@ -98,12 +98,12 @@ impl GenericGenerator {
                     GenericParamDefKind::Const { type_, default } => {
                         params.push_str("const ");
                         params.push_str(&param_def.name);
+
+                        params.push_str(": ");
+                        params.push_str(&TypeGenerator::type_to_string(type_));
                         if let Some(default) = default {
                             params.push_str(" = ");
                             params.push_str(default);
-                        } else {
-                            params.push_str(": ");
-                            params.push_str(&TypeGenerator::type_to_string(type_));
                         }
                     }
                 }
