@@ -22,6 +22,7 @@ impl Generator for StructGenerator {
             impls,
         }) = &item.inner
         {
+            let mut fields_section = String::new();
             let mut syntax = String::from("```rust\n");
             syntax.push_str(&VisibilityGenerator::generate_visibility(&item.visibility));
             syntax.push_str("struct ");
@@ -71,6 +72,10 @@ impl Generator for StructGenerator {
                             syntax.push_str("\n{")
                         }
 
+                        if fields.len() > 0 {
+                            fields_section.push_str("## Fields\n")
+                        }
+
                         for field_id in fields {
                             let Some(field_item) = index.get(field_id) else {
                                 return Err(anyhow::Error::msg(format!(
@@ -96,6 +101,12 @@ impl Generator for StructGenerator {
                             syntax.push_str(": ");
                             syntax.push_str(&TypeGenerator::type_to_string(type_));
                             syntax.push_str(",\n");
+
+                            fields_section.push_str("- `");
+                            fields_section.push_str(field_name);
+                            fields_section.push_str("` : `");
+                            fields_section.push_str(&TypeGenerator::type_to_string(type_));
+                            fields_section.push_str("`\n");
                         }
 
                         if *has_stripped_fields {
@@ -105,6 +116,7 @@ impl Generator for StructGenerator {
                     }
                 }
                 syntax.push_str("\n```\n");
+                syntax.push_str(&fields_section);
                 return Ok(syntax);
             }
             return Err(anyhow::Error::msg("Can't document a struct with no name"));

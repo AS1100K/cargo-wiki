@@ -2,7 +2,7 @@ use crate::generators::type_gen::TypeGenerator;
 use anyhow::Result;
 use rustdoc_types::{
     GenericArg, GenericArgs, GenericBound, GenericParamDef, GenericParamDefKind, Generics, Term,
-    TraitBoundModifier, Type, WherePredicate,
+    TraitBoundModifier, WherePredicate,
 };
 
 pub struct GenericGenerator;
