@@ -107,6 +107,12 @@ impl Generator for StructGenerator {
                             fields_section.push_str("` : `");
                             fields_section.push_str(&TypeGenerator::type_to_string(type_));
                             fields_section.push_str("`\n");
+
+                            if let Some(docs) = &field_item.docs {
+                                fields_section.push_str("\n\t");
+                                fields_section.push_str(docs);
+                                fields_section.push_str("\n");
+                            }
                         }
 
                         if *has_stripped_fields {

@@ -8,6 +8,7 @@ pub struct Basic {
 }
 
 pub struct ComplexStruct<'a, T: 'a + ?Sized, U: Default = i32> {
+    /// This is a reference
     pub reference: &'a T,
     pub value: U,
     pub slice: &'a [u32; 50],
