@@ -6,6 +6,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write
+
 jobs:
   build-docs:
     runs-on: ubuntu-latest
@@ -34,7 +37,7 @@ jobs:
 
       - name: Add feature `more_maybe_bounds`
         run: |
-          x=`echo -n "#![feature(more_maybe_bounds)]\n"; cat cargo-wiki/src/lib.rs`
+          x=`echo -n "#![feature(more_maybe_bounds)]"; cat cargo-wiki/src/lib.rs`
           echo "$x" > cargo-wiki/src/lib.rs
 
       - name: Generate Doc and push wiki
@@ -42,8 +45,9 @@ jobs:
           cd cargo-wiki
           cargo build
           cp target/debug/cargo-wiki .
+          ./cargo-wiki --all-features
           rm -rf ../wiki/docs
-          cp target/wiki_cache ../wiki/docs
+          cp --recursive target/wiki_cache/cargo_wiki ../wiki/docs
           cd ../wiki
           git add .
           git diff-index --quiet HEAD || git commit -m "Add changes" && git push
