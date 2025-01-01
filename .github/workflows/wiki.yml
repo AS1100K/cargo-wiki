@@ -45,7 +45,7 @@ jobs:
           cd cargo-wiki
           cargo build
           cp target/debug/cargo-wiki .
-          ./cargo-wiki --all-features -s single-file
+          ./cargo-wiki -- --all-features -s single-file
           rm -rf ../wiki/docs
           cp --recursive target/wiki_cache ../wiki/docs
           cd ../wiki
