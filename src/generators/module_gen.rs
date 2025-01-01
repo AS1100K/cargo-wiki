@@ -1,4 +1,4 @@
-use crate::gen_path;
+use crate::{gen_path, Configuration, WikiStructure};
 use crate::generators::struct_gen::StructGenerator;
 use crate::generators::{ExternalCrates, Generator, Index, Paths};
 use anyhow::Result;
@@ -46,6 +46,7 @@ impl<'a> ModuleField<'a> {
 }
 
 pub struct ModuleGenerator<'a> {
+    pub configuration: &'a Configuration,
     pub prefix_path: String,
     pub module_file_name: &'a str,
     pub root_item: &'a Item,
@@ -56,6 +57,7 @@ pub struct ModuleGenerator<'a> {
 
 impl<'a> ModuleGenerator<'a> {
     pub fn new(
+        configuration: &'a Configuration,
         prefix_path: String,
         module_file_name: &'a str,
         root_item: &'a Item,
@@ -64,6 +66,7 @@ impl<'a> ModuleGenerator<'a> {
         external_crate: &'a ExternalCrates,
     ) -> Self {
         Self {
+            configuration,
             prefix_path,
             module_file_name,
             root_item,
@@ -90,7 +93,10 @@ impl<'a> ModuleGenerator<'a> {
                 https://github.com/as1100k/cargo-wiki/issues with appropriate logs.",
             ));
         };
-        let mut path = format!("{}/{}", self.prefix_path, module_name);
+        let mut path = match self.configuration.structure {
+            WikiStructure::Directory => format!("{}/{}", self.prefix_path, module_name),
+            WikiStructure::SingleFile => self.prefix_path
+        };
         let mut module_file_content = format!("# {}\n\n", module_name);
         let mut module_information = ModuleItems::default();
 
@@ -124,6 +130,7 @@ impl<'a> ModuleGenerator<'a> {
                     });
 
                     let new_module_generator = Self::new(
+                        &self.configuration,
                         path,
                         &self.module_file_name,
                         item,
@@ -138,7 +145,10 @@ impl<'a> ModuleGenerator<'a> {
                 ItemEnum::Struct(_) => {
                     module_information.structs.push(ModuleField {
                         name: item_name,
-                        link: format!("./struct.{}.md", item_name),
+                        link: match self.configuration.structure {
+                            WikiStructure::Directory => format!("./struct.{}.md", item_name),
+                            WikiStructure::SingleFile => format!("#{}", item_name)
+                        },
                         description: &item_description,
                     });
 
@@ -156,13 +166,21 @@ impl<'a> ModuleGenerator<'a> {
                 _ => continue,
             }
 
-            path.push_str(".md");
-            fs::write(path, file_content)
-                .expect("TODO: panic message at `src/generators/module_gen.rs`");
+            if WikiStructure::Directory == self.configuration.structure {
+                path.push_str(".md");
+                fs::write(path, file_content)
+                    .expect("TODO: panic message at `src/generators/module_gen.rs`");
+            } else {
+                module_file_content.push_str("\n");
+                module_file_content.push_str(&file_content);
+            }
         }
 
         path.push_str("/");
-        path.push_str(self.module_file_name);
+        match self.configuration.structure {
+            WikiStructure::Directory => path.push_str(self.module_file_name),
+            WikiStructure::SingleFile => path.push_str(module_name)
+        }
         path.push_str(".md");
 
         module_file_content.push_str(&Self::generate_module_docs(&module_information));

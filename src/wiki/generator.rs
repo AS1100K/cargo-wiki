@@ -16,6 +16,7 @@ pub fn generate_wiki(configuration: &Configuration, crate_type: Crate) -> Result
     };
 
     let module_generator = ModuleGenerator::new(
+        configuration,
         path,
         MODULE_FILE_NAME,
         root_module,

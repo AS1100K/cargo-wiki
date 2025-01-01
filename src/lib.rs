@@ -43,19 +43,30 @@ pub struct Configuration {
     pub no_deps: bool,
     #[arg(short, long, value_enum, default_value_t = MarkdownFlavor::GitHub)]
     pub markdown_flavor: MarkdownFlavor,
+    #[arg(short, long, value_enum, default_value_t = WikiStructure::Directory)]
+    pub structure: WikiStructure,
     // TODO: Add more arguments to support more features
     // refer: https://doc.rust-lang.org/cargo/commands/cargo-doc.html
     // refer: https://doc.rust-lang.org/cargo/commands/cargo-rustdoc.html
 }
 
 /// Markdown Flavor to be used
-#[derive(Debug, ValueEnum, Clone)]
+#[derive(Debug, ValueEnum, Clone, PartialEq)]
 pub enum MarkdownFlavor {
     /// GitHub Markdown Flavor
     GitHub,
     /// GitLab Markdown Flavor
     GitLab,
     // TODO: Add support for other markdown flavors
+}
+
+/// Structure of the wiki
+#[derive(Debug, ValueEnum, Clone, PartialEq)]
+pub enum WikiStructure {
+    /// Structure via directory. This will create multiple directories.
+    Directory,
+    /// A Single file for the entire module.
+    SingleFile
 }
 
 pub const WIKI_OUTPUT_PATH: &str = "target/wiki";
