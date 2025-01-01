@@ -1,0 +1,49 @@
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+    name: Build Docs using cargo wiki
+    steps:
+      - name: Checkout Base repository
+        uses: actions/checkout@v4
+        with:
+          path: cargo-wiki
+
+      - name: Checkout wiki repository
+        uses: actions/checkout@v4
+        with:
+          repository: '${{ github.repository }}.wiki'
+          path: wiki
+
+      - name: Install Rust Toolchain
+        uses: rs-workspace/rust-toolchain@v0.2.0
+        with:
+          toolchain: 'nightly'
+
+      - name: Configure Git
+        run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+
+      - name: Add feature `more_maybe_bounds`
+        run: |
+          x=`echo -n "#![feature(more_maybe_bounds)]\n"; cat cargo-wiki/src/lib.rs`
+          echo "$x" > cargo-wiki/src/lib.rs
+
+      - name: Generate Doc and push wiki
+        run: |
+          cd cargo-wiki
+          cargo build
+          cp target/debug/cargo-wiki .
+          rm -rf ../wiki/docs
+          cp target/wiki_cache ../wiki/docs
+          cd ../wiki
+          git add .
+          git diff-index --quiet HEAD || git commit -m "Add changes" && git push
