@@ -10,7 +10,7 @@ pub struct StructGenerator;
 impl Generator for StructGenerator {
     /// Generate Code Syntax for `Struct`. See [Template.html](https://github.com/AS1100K/cargo-wiki/blob/main/Template.md#struct-syntax-block)
     /// for more info.
-    fn generate_syntax(
+    fn generate_page(
         item: &Item,
         index: &Index,
         paths: &Paths,

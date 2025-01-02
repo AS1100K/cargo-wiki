@@ -18,7 +18,7 @@ pub type ExternalCrates = HashMap<u32, rustdoc_types::ExternalCrate>;
 /// **NOTE:** [ModuleGenerator](module_gen::ModuleGenerator) doesn't follow `Generator` trait even
 /// though module have a whole file for them as this is a special kind of generator.
 pub trait Generator {
-    fn generate_syntax(
+    fn generate_page(
         item: &Item,
         index: &Index,
         paths: &Paths,

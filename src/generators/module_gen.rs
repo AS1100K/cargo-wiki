@@ -155,13 +155,13 @@ impl<'a> ModuleGenerator<'a> {
                     path.push_str("/struct.");
                     path.push_str(item_name);
 
-                    let syntax = StructGenerator::generate_syntax(
+                    let page = StructGenerator::generate_page(
                         item,
                         self.index,
                         self.paths,
                         self.external_crate,
                     )?;
-                    file_content.push_str(&syntax);
+                    file_content.push_str(&page);
                 }
                 _ => continue,
             }
