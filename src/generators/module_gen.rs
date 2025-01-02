@@ -1,13 +1,12 @@
-use crate::{gen_path, Configuration, WikiStructure};
+use crate::{gen_path, Configuration};
 use crate::generators::struct_gen::StructGenerator;
 use crate::generators::{ExternalCrates, Generator, Index, Paths};
 use anyhow::Result;
-use rustdoc_types::{Item, ItemEnum, Module};
-use std::fs;
+use rustdoc_types::{Item, ItemEnum, ItemKind, Module};
 
 pub const MODULE_FILE_NAME: &str = "README";
 
-#[derive(Default)]
+#[derive(Default, Debug, Clone)]
 pub struct ModuleItems<'a> {
     pub modules: Vec<ModuleField<'a>>,
     pub traits: Vec<ModuleField<'a>>,
@@ -19,6 +18,79 @@ pub struct ModuleItems<'a> {
     pub consts: Vec<ModuleField<'a>>,
 }
 
+impl<'a> ModuleItems<'a> {
+    pub fn generate_docs(&self) -> String {
+        let mut module_information_string = String::new();
+
+        // Modules
+        if self.modules.len() > 0 {
+            module_information_string.push_str("\n## Modules\n\n");
+            for field in &self.modules {
+                module_information_string.push_str(&field.to_string());
+            }
+        }
+
+        // Constants
+        if self.consts.len() > 0 {
+            module_information_string.push_str("## Constants\n\n");
+            for field in &self.consts {
+                module_information_string.push_str(&field.to_string());
+            }
+        }
+
+        // Structs
+        if self.structs.len() > 0 {
+            module_information_string.push_str("## Structs\n\n");
+            for field in &self.structs {
+                module_information_string.push_str(&field.to_string());
+            }
+        }
+
+        // Enums
+        if self.enums.len() > 0 {
+            module_information_string.push_str("## Enums\n\n");
+            for field in &self.enums {
+                module_information_string.push_str(&field.to_string());
+            }
+        }
+
+        // Traits
+        if self.traits.len() > 0 {
+            module_information_string.push_str("## Traits\n\n");
+            for field in &self.traits {
+                module_information_string.push_str(&field.to_string());
+            }
+        }
+
+        // Functions
+        if self.functions.len() > 0 {
+            module_information_string.push_str("## Functions\n\n");
+            for field in &self.functions {
+                module_information_string.push_str(&field.to_string());
+            }
+        }
+
+        // Macros
+        if self.macros.len() > 0 {
+            module_information_string.push_str("## Macros\n\n");
+            for field in &self.macros {
+                module_information_string.push_str(&field.to_string());
+            }
+        }
+
+        // Re-exports
+        if self.re_exports.len() > 0 {
+            module_information_string.push_str("## Re-exports\n\n");
+            for field in &self.re_exports {
+                module_information_string.push_str(&field.to_string());
+            }
+        }
+
+        module_information_string
+    }
+}
+
+#[derive(Debug, Clone)]
 pub struct ModuleField<'a> {
     pub name: &'a str,
     pub link: String,
@@ -43,6 +115,23 @@ impl<'a> ModuleField<'a> {
 
         field_string
     }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct ModuleDocumentation<'a> {
+    pub file_path: String,
+    pub title: &'a str,
+    pub module_items: ModuleItems<'a>,
+    pub content: Vec<ModuleContent<'a>>,
+    pub inner_modules: Vec<ModuleDocumentation<'a>>
+}
+
+#[derive(Debug, Clone)]
+pub struct ModuleContent<'a> {
+    pub file_path: String,
+    pub kind: ItemKind,
+    pub title: &'a str,
+    pub page: String,
 }
 
 pub struct ModuleGenerator<'a> {
@@ -76,7 +165,9 @@ impl<'a> ModuleGenerator<'a> {
         }
     }
 
-    pub fn auto(self) -> Result<()> {
+    pub fn auto(self) -> Result<ModuleDocumentation<'a>> {
+        let mut module_documentations = ModuleDocumentation::default();
+
         let Some(module_name) = &self.root_item.name else {
             return Err(anyhow::Error::msg(format!(
                 "Every module should have a name. Id: {}",
@@ -93,12 +184,10 @@ impl<'a> ModuleGenerator<'a> {
                 https://github.com/as1100k/cargo-wiki/issues with appropriate logs.",
             ));
         };
-        let mut path = match self.configuration.structure {
-            WikiStructure::Directory => format!("{}/{}", self.prefix_path, module_name),
-            WikiStructure::SingleFile => self.prefix_path
-        };
-        let mut module_file_content = format!("# {}\n\n", module_name);
-        let mut module_information = ModuleItems::default();
+
+        module_documentations.title = module_name;
+
+        let mut path = format!("{}/{}", self.prefix_path, module_name);
 
         gen_path(&path)?;
 
@@ -115,15 +204,14 @@ impl<'a> ModuleGenerator<'a> {
 
             let item_description = match &item.docs {
                 Some(doc) => &doc[..doc.len().min(50)],
-                None => ""
+                None => "",
             };
 
             let mut path = format!("{}", path);
-            let mut file_content = format!("# {}\n\n", item_name);
 
             match &item.inner {
                 ItemEnum::Module(_) => {
-                    module_information.modules.push(ModuleField {
+                    module_documentations.module_items.modules.push(ModuleField {
                         name: item_name,
                         link: format!("./{}/{}.md", item_name, self.module_file_name),
                         description: &item_description,
@@ -138,22 +226,22 @@ impl<'a> ModuleGenerator<'a> {
                         self.paths,
                         self.external_crate,
                     );
-                    new_module_generator.auto()?;
+                    let n_module_documentation = new_module_generator.auto()?;
+                    module_documentations.inner_modules.push(n_module_documentation);
+
                     // Move to the next item as module will document itself separately
                     continue;
                 }
                 ItemEnum::Struct(_) => {
-                    module_information.structs.push(ModuleField {
+                    module_documentations.module_items.structs.push(ModuleField {
                         name: item_name,
-                        link: match self.configuration.structure {
-                            WikiStructure::Directory => format!("./struct.{}.md", item_name),
-                            WikiStructure::SingleFile => format!("#{}", item_name)
-                        },
+                        link: format!("./struct.{}.md", item_name),
                         description: &item_description,
                     });
 
                     path.push_str("/struct.");
                     path.push_str(item_name);
+                    path.push_str(".md");
 
                     let page = StructGenerator::generate_page(
                         item,
@@ -161,103 +249,26 @@ impl<'a> ModuleGenerator<'a> {
                         self.paths,
                         self.external_crate,
                     )?;
-                    file_content.push_str(&page);
+
+                    module_documentations.content.push(ModuleContent {
+                        file_path: path.clone(),
+                        kind: ItemKind::Struct,
+                        title: item_name,
+                        page
+                    });
                 }
                 _ => continue,
             }
 
-            if WikiStructure::Directory == self.configuration.structure {
-                path.push_str(".md");
-                fs::write(path, file_content)
-                    .expect("TODO: panic message at `src/generators/module_gen.rs`");
-            } else {
-                module_file_content.push_str("\n");
-                module_file_content.push_str(&file_content);
-            }
+            path.push_str(".md");
         }
 
         path.push_str("/");
-        match self.configuration.structure {
-            WikiStructure::Directory => path.push_str(self.module_file_name),
-            WikiStructure::SingleFile => path.push_str(module_name)
-        }
+        path.push_str(self.module_file_name);
         path.push_str(".md");
 
-        module_file_content.push_str(&Self::generate_module_docs(&module_information));
-        fs::write(path, module_file_content).expect(
-            "TODO: panic message at `src/generators/module_gen.rs` while saving module file",
-        );
+        module_documentations.file_path = path;
 
-        Ok(())
-    }
-
-    pub fn generate_module_docs(module_information: &ModuleItems) -> String {
-        let mut module_information_string = String::new();
-
-        // Modules
-        if module_information.modules.len() > 0 {
-            module_information_string.push_str("\n## Modules\n\n");
-            for field in &module_information.modules {
-                module_information_string.push_str(&field.to_string());
-            }
-        }
-
-        // Constants
-        if module_information.consts.len() > 0 {
-            module_information_string.push_str("## Constants\n\n");
-            for field in &module_information.consts {
-                module_information_string.push_str(&field.to_string());
-            }
-        }
-
-        // Structs
-        if module_information.structs.len() > 0 {
-            module_information_string.push_str("## Structs\n\n");
-            for field in &module_information.structs {
-                module_information_string.push_str(&field.to_string());
-            }
-        }
-
-        // Enums
-        if module_information.enums.len() > 0 {
-            module_information_string.push_str("## Enums\n\n");
-            for field in &module_information.enums {
-                module_information_string.push_str(&field.to_string());
-            }
-        }
-
-        // Traits
-        if module_information.traits.len() > 0 {
-            module_information_string.push_str("## Traits\n\n");
-            for field in &module_information.traits {
-                module_information_string.push_str(&field.to_string());
-            }
-        }
-
-        // Functions
-        if module_information.functions.len() > 0 {
-            module_information_string.push_str("## Functions\n\n");
-            for field in &module_information.functions {
-                module_information_string.push_str(&field.to_string());
-            }
-        }
-
-        // Macros
-        if module_information.macros.len() > 0 {
-            module_information_string.push_str("## Macros\n\n");
-            for field in &module_information.macros {
-                module_information_string.push_str(&field.to_string());
-            }
-        }
-
-        // Re-exports
-        if module_information.re_exports.len() > 0 {
-            module_information_string.push_str("## Re-exports\n\n");
-            for field in &module_information.re_exports {
-                module_information_string.push_str(&field.to_string());
-            }
-        }
-
-        module_information_string
+        Ok(module_documentations.clone())
     }
 }

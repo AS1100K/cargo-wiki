@@ -65,8 +65,8 @@ pub enum MarkdownFlavor {
 pub enum WikiStructure {
     /// Structure via directory. This will create multiple directories.
     Directory,
-    /// A Single file for the entire module.
-    SingleFile
+    /// A Single file for the entire crate.
+    SingleFile,
 }
 
 pub const WIKI_OUTPUT_PATH: &str = "target/wiki";
@@ -82,6 +82,21 @@ pub fn gen_path(path: &str) -> Result<()> {
     if !wiki_output_path.exists() {
         create_dir_all(wiki_output_path)?
     }
+    Ok(())
+}
+
+pub fn save_file(path: &str, content: &str) -> Result<()> {
+    let new_path = Path::new(path);
+
+    if let Some(parent) = new_path.parent() {
+        gen_path(
+            parent
+                .to_str()
+                .expect("Failed to convert Path to string at lib.rs"),
+        )?;
+    }
+
+    fs::write(path, content).expect("TODO: Panic Message at lib.rs");
     Ok(())
 }
 
