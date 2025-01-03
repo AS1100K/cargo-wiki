@@ -1,4 +1,4 @@
-use crate::{gen_path, Configuration};
+use crate::Configuration;
 use crate::generators::struct_gen::StructGenerator;
 use crate::generators::{ExternalCrates, Generator, Index, Paths};
 use anyhow::Result;
@@ -194,8 +194,6 @@ impl<'a> ModuleGenerator<'a> {
         module_documentations.title = module_name;
 
         let mut path = format!("{}/{}", self.prefix_path, module_name);
-
-        gen_path(&path)?;
 
         for item in items {
             let Some(item) = self.index.get(item) else {
