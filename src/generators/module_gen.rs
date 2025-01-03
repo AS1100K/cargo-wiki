@@ -131,7 +131,13 @@ pub struct ModuleContent<'a> {
     pub file_path: String,
     pub kind: ItemKind,
     pub title: &'a str,
-    pub page: String,
+    pub inner: Vec<InnerModuleContent>
+}
+
+#[derive(Debug, Clone)]
+pub struct InnerModuleContent {
+    pub title: String,
+    pub content: String,
 }
 
 pub struct ModuleGenerator<'a> {
@@ -243,7 +249,7 @@ impl<'a> ModuleGenerator<'a> {
                     path.push_str(item_name);
                     path.push_str(".md");
 
-                    let page = StructGenerator::generate_page(
+                    let inner = StructGenerator::generate_page(
                         item,
                         self.index,
                         self.paths,
@@ -254,7 +260,7 @@ impl<'a> ModuleGenerator<'a> {
                         file_path: path.clone(),
                         kind: ItemKind::Struct,
                         title: item_name,
-                        page
+                        inner
                     });
                 }
                 _ => continue,

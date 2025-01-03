@@ -4,6 +4,7 @@ use crate::generators::visibility_gen::VisibilityGenerator;
 use crate::generators::{ExternalCrates, Generator, Index, Paths};
 use anyhow::Result;
 use rustdoc_types::{Item, ItemEnum, StructKind};
+use crate::generators::module_gen::InnerModuleContent;
 
 pub struct StructGenerator;
 
@@ -15,7 +16,7 @@ impl Generator for StructGenerator {
         index: &Index,
         paths: &Paths,
         external_crates: &ExternalCrates,
-    ) -> Result<String> {
+    ) -> Result<Vec<InnerModuleContent>> {
         if let ItemEnum::Struct(rustdoc_types::Struct {
             kind,
             generics,
@@ -72,10 +73,6 @@ impl Generator for StructGenerator {
                             syntax.push_str("\n{")
                         }
 
-                        if fields.len() > 0 {
-                            fields_section.push_str("## Fields\n")
-                        }
-
                         for field_id in fields {
                             let Some(field_item) = index.get(field_id) else {
                                 return Err(anyhow::Error::msg(format!(
@@ -121,9 +118,19 @@ impl Generator for StructGenerator {
                         syntax.push_str("}");
                     }
                 }
-                syntax.push_str("\n```\n");
-                syntax.push_str(&fields_section);
-                return Ok(syntax);
+
+                syntax.push_str("\n```");
+
+                return Ok(vec![
+                    InnerModuleContent {
+                        title: String::new(),
+                        content: syntax
+                    },
+                    InnerModuleContent {
+                        title: String::from("Fields"),
+                        content: fields_section
+                    }
+                ]);
             }
             return Err(anyhow::Error::msg("Can't document a struct with no name"));
         }

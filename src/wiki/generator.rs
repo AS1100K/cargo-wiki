@@ -1,4 +1,4 @@
-use crate::generators::module_gen::{ModuleContent, ModuleDocumentation, ModuleGenerator, MODULE_FILE_NAME};
+use crate::generators::module_gen::{InnerModuleContent, ModuleContent, ModuleDocumentation, ModuleGenerator, MODULE_FILE_NAME};
 use crate::{gen_path, save_file, Configuration, WikiStructure, WIKI_CACHE_PATH};
 use anyhow::Result;
 use rustdoc_types::Crate;
@@ -39,17 +39,17 @@ pub fn generate_wiki(configuration: &Configuration, crate_type: Crate) -> Result
 }
 
 impl<'a> ModuleDocumentation<'a> {
-    pub fn generate_docs(self, configuration: &Configuration) -> Result<String> {
+    pub fn generate_docs(&self, configuration: &Configuration) -> Result<String> {
         let mut file_content = format!("# {} \n\n", self.title);
         file_content.push_str(&self.module_items.generate_docs());
 
         match configuration.structure {
             WikiStructure::Directory => {
-                for content in self.content {
+                for content in &self.content {
                     content.save_to_file()?
                 }
 
-                for module in self.inner_modules {
+                for module in &self.inner_modules {
                     module.generate_docs(configuration)?;
                 }
 
@@ -57,14 +57,21 @@ impl<'a> ModuleDocumentation<'a> {
                 Ok(String::new())
             }
             WikiStructure::SingleFile => {
-                for content in self.content {
+                for content in &self.content {
                     file_content.push_str("\n## ");
                     file_content.push_str(&content.title);
                     file_content.push_str("\n\n");
-                    file_content.push_str(&content.page);
+
+                    for inner in &content.inner {
+                        file_content.push_str("\n\n");
+                        file_content.push_str(&inner.to_string());
+                    }
                 }
 
-                for module in self.inner_modules {
+                for (i, module) in self.inner_modules.iter().enumerate() {
+                    if i != 0 {
+                        file_content.push_str("\n\n---\n\n");
+                    }
                     let inner_module_doc = module.generate_docs(configuration)?;
                     file_content.push_str("\n\n");
                     file_content.push_str(&inner_module_doc);
@@ -77,10 +84,33 @@ impl<'a> ModuleDocumentation<'a> {
 }
 
 impl<'a> ModuleContent<'a> {
-    pub fn save_to_file(self) -> Result<()> {
+    pub fn save_to_file(&self) -> Result<()> {
         let mut file_content = format!("# {}\n\n", self.title);
-        file_content.push_str(&self.page);
+
+        for inner in &self.inner {
+            file_content.push_str(&inner.to_string());
+            file_content.push_str("\n\n");
+        }
 
         save_file(&self.file_path, &file_content)
+    }
+}
+
+impl InnerModuleContent {
+    pub fn to_string(&self) -> String {
+        let mut module_content = String::new();
+
+        if self.content.is_empty() {
+            return module_content
+        }
+
+        if !self.title.is_empty() {
+            module_content.push_str("## ");
+            module_content.push_str(&self.title);
+            module_content.push_str("\n\n");
+        }
+
+        module_content.push_str(&self.content);
+        module_content
     }
 }
