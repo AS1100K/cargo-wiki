@@ -47,7 +47,7 @@ jobs:
           cp target/debug/cargo-wiki .
           ./cargo-wiki -- --all-features -s single-file
           rm -rf ../wiki/docs
-          cp --recursive target/wiki_cache ../wiki/docs
+          cp --recursive target/wiki ../wiki/docs
           cd ../wiki
           git add .
           git diff-index --quiet HEAD || git commit -m "Add changes" && git push

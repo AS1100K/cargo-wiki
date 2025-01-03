@@ -1,11 +1,11 @@
 use crate::generators::module_gen::{InnerModuleContent, ModuleContent, ModuleDocumentation, ModuleGenerator, MODULE_FILE_NAME};
-use crate::{gen_path, save_file, Configuration, WikiStructure, WIKI_CACHE_PATH};
+use crate::{gen_path, save_file, Configuration, WikiStructure, WIKI_OUTPUT_PATH};
 use anyhow::Result;
 use rustdoc_types::Crate;
 
 pub fn generate_wiki(configuration: &Configuration, crate_type: Crate) -> Result<()> {
     let crate_id = &crate_type.root;
-    let path = WIKI_CACHE_PATH.to_string();
+    let path = WIKI_OUTPUT_PATH.to_string();
     gen_path(&path).expect("Failed to create file");
 
     let Some(root_module) = crate_type.index.get(&crate_type.root) else {
@@ -31,7 +31,7 @@ pub fn generate_wiki(configuration: &Configuration, crate_type: Crate) -> Result
 
     let module_docs = module_generator.auto()?.generate_docs(configuration)?;
     if !module_docs.is_empty() {
-        let path = format!("{}/{}.md", WIKI_CACHE_PATH, root_module_name);
+        let path = format!("{}/{}.md", WIKI_OUTPUT_PATH, root_module_name);
         save_file(&path, &module_docs)?;
     }
 
