@@ -2,6 +2,7 @@ pub struct UnitStruct;
 
 pub struct TupleStruct(i32, u64);
 
+/// This is a very basic struct
 pub struct Basic {
     pub type_: String,
     pub r#type: String,

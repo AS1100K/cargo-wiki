@@ -24,6 +24,10 @@ impl Generator for StructGenerator {
             impls,
         }) = &item.inner
         {
+            let mut docs = match &item.docs {
+                Some(docs) => docs.clone(),
+                None => String::new(),
+            };
             let mut fields_section = String::new();
             let mut syntax = String::from("```rust\n");
             syntax.push_str(&VisibilityGenerator::generate_visibility(&item.visibility));
@@ -128,6 +132,10 @@ impl Generator for StructGenerator {
                     InnerModuleContent {
                         title: String::new(),
                         content: syntax,
+                    },
+                    InnerModuleContent {
+                        title: String::new(),
+                        content: docs,
                     },
                     InnerModuleContent {
                         title: String::from("Fields"),
