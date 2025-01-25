@@ -27,9 +27,9 @@ where
 /// Uses Higher-Rank Trait Bounds (HRTBs)
 pub struct HRTBPredicateStruct<'a, T, U, F>
 where
-        for<'b> T: 'b + ?Sized,
-        U: Default,
-        F: Fn(&'a T) -> U,
+    for<'b> T: 'b + ?Sized,
+    U: Default,
+    F: Fn(&'a T) -> U,
 {
     pub reference: &'a T,
     pub value: U,

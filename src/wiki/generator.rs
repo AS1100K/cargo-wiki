@@ -1,4 +1,6 @@
-use crate::generators::module_gen::{InnerModuleContent, ModuleContent, ModuleDocumentation, ModuleGenerator, MODULE_FILE_NAME};
+use crate::generators::module_gen::{
+    InnerModuleContent, ModuleContent, ModuleDocumentation, ModuleGenerator, MODULE_FILE_NAME,
+};
 use crate::{gen_path, save_file, Configuration, WikiStructure, WIKI_OUTPUT_PATH};
 use anyhow::Result;
 use rustdoc_types::Crate;
@@ -16,7 +18,9 @@ pub fn generate_wiki(configuration: &Configuration, crate_type: Crate) -> Result
     };
 
     let Some(root_module_name) = &root_module.name else {
-        return Err(anyhow::Error::msg("The crate must have a name, Empty name is not allowed."))
+        return Err(anyhow::Error::msg(
+            "The crate must have a name, Empty name is not allowed.",
+        ));
     };
 
     let module_generator = ModuleGenerator::new(
@@ -101,7 +105,7 @@ impl InnerModuleContent {
         let mut module_content = String::new();
 
         if self.content.is_empty() {
-            return module_content
+            return module_content;
         }
 
         if !self.title.is_empty() {

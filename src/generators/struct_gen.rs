@@ -1,10 +1,10 @@
 use crate::generators::generic_gen::GenericGenerator;
+use crate::generators::module_gen::InnerModuleContent;
 use crate::generators::type_gen::TypeGenerator;
 use crate::generators::visibility_gen::VisibilityGenerator;
 use crate::generators::{ExternalCrates, Generator, Index, Paths};
 use anyhow::Result;
 use rustdoc_types::{Item, ItemEnum, StructKind};
-use crate::generators::module_gen::InnerModuleContent;
 
 pub struct StructGenerator;
 
@@ -124,12 +124,12 @@ impl Generator for StructGenerator {
                 return Ok(vec![
                     InnerModuleContent {
                         title: String::new(),
-                        content: syntax
+                        content: syntax,
                     },
                     InnerModuleContent {
                         title: String::from("Fields"),
-                        content: fields_section
-                    }
+                        content: fields_section,
+                    },
                 ]);
             }
             return Err(anyhow::Error::msg("Can't document a struct with no name"));

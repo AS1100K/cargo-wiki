@@ -1,7 +1,7 @@
+use crate::generators::module_gen::InnerModuleContent;
 use anyhow::Result;
 use rustdoc_types::{Id, Item, ItemSummary};
 use std::collections::HashMap;
-use crate::generators::module_gen::InnerModuleContent;
 
 pub mod generic_gen;
 pub mod module_gen;

@@ -1,6 +1,6 @@
-use crate::Configuration;
 use crate::generators::struct_gen::StructGenerator;
 use crate::generators::{ExternalCrates, Generator, Index, Paths};
+use crate::Configuration;
 use anyhow::Result;
 use rustdoc_types::{Item, ItemEnum, ItemKind, Module};
 
@@ -123,7 +123,7 @@ pub struct ModuleDocumentation<'a> {
     pub title: &'a str,
     pub module_items: ModuleItems<'a>,
     pub content: Vec<ModuleContent<'a>>,
-    pub inner_modules: Vec<ModuleDocumentation<'a>>
+    pub inner_modules: Vec<ModuleDocumentation<'a>>,
 }
 
 #[derive(Debug, Clone)]
@@ -131,7 +131,7 @@ pub struct ModuleContent<'a> {
     pub file_path: String,
     pub kind: ItemKind,
     pub title: &'a str,
-    pub inner: Vec<InnerModuleContent>
+    pub inner: Vec<InnerModuleContent>,
 }
 
 #[derive(Debug, Clone)]
@@ -215,11 +215,14 @@ impl<'a> ModuleGenerator<'a> {
 
             match &item.inner {
                 ItemEnum::Module(_) => {
-                    module_documentations.module_items.modules.push(ModuleField {
-                        name: item_name,
-                        link: format!("./{}/{}.md", item_name, self.module_file_name),
-                        description: &item_description,
-                    });
+                    module_documentations
+                        .module_items
+                        .modules
+                        .push(ModuleField {
+                            name: item_name,
+                            link: format!("./{}/{}.md", item_name, self.module_file_name),
+                            description: &item_description,
+                        });
 
                     let new_module_generator = Self::new(
                         &self.configuration,
@@ -231,17 +234,22 @@ impl<'a> ModuleGenerator<'a> {
                         self.external_crate,
                     );
                     let n_module_documentation = new_module_generator.auto()?;
-                    module_documentations.inner_modules.push(n_module_documentation);
+                    module_documentations
+                        .inner_modules
+                        .push(n_module_documentation);
 
                     // Move to the next item as module will document itself separately
                     continue;
                 }
                 ItemEnum::Struct(_) => {
-                    module_documentations.module_items.structs.push(ModuleField {
-                        name: item_name,
-                        link: format!("./struct.{}.md", item_name),
-                        description: &item_description,
-                    });
+                    module_documentations
+                        .module_items
+                        .structs
+                        .push(ModuleField {
+                            name: item_name,
+                            link: format!("./struct.{}.md", item_name),
+                            description: &item_description,
+                        });
 
                     path.push_str("/struct.");
                     path.push_str(item_name);
@@ -258,7 +266,7 @@ impl<'a> ModuleGenerator<'a> {
                         file_path: path.clone(),
                         kind: ItemKind::Struct,
                         title: item_name,
-                        inner
+                        inner,
                     });
                 }
                 _ => continue,
