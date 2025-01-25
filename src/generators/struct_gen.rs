@@ -1,3 +1,4 @@
+use super::impls_gen::ImplsGenerator;
 use crate::generators::generic_gen::GenericGenerator;
 use crate::generators::module_gen::InnerModuleContent;
 use crate::generators::type_gen::TypeGenerator;
@@ -5,7 +6,6 @@ use crate::generators::visibility_gen::VisibilityGenerator;
 use crate::generators::{ExternalCrates, Generator, Index, Paths};
 use anyhow::Result;
 use rustdoc_types::{Item, ItemEnum, StructKind};
-use super::impls_gen::ImplsGenerator;
 
 pub struct StructGenerator;
 

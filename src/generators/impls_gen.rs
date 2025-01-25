@@ -18,7 +18,7 @@ impl ImplsGenerator {
         };
 
         let mut trait_implementations = InnerModuleContent {
-            title: "Traitl Implementations".to_string(),
+            title: "Trait Implementations".to_string(),
             content: String::new(),
         };
 
@@ -49,7 +49,7 @@ impl ImplsGenerator {
                     };
 
                     if let Some(trait_) = &impl_info.trait_ {
-                        current_impl.content.push_str("impl");
+                        current_impl.content.push_str("`impl");
                         current_impl.content.push_str(&params);
                         current_impl.content.push_str(" ");
 
@@ -65,7 +65,7 @@ impl ImplsGenerator {
                             .content
                             .push_str(&&TypeGenerator::type_to_string(&impl_info.for_));
                         current_impl.content.push_str(&where_predicate);
-                        current_impl.content.push_str("\n");
+                        current_impl.content.push_str("`\n\n");
                     }
 
                     // Generate syntax for functions
@@ -81,7 +81,7 @@ impl ImplsGenerator {
                                         function,
                                         function_name,
                                     )?);
-                                current_impl.content.push_str("\n");
+                                current_impl.content.push_str("\n\n");
                             }
                         }
                     }
