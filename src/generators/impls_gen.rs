@@ -75,13 +75,33 @@ impl ImplsGenerator {
                                 continue;
                             };
                             if let ItemEnum::Function(function) = &function_item.inner {
+                                let docs = match &function_item.docs {
+                                    Some(docs) => {
+                                        if !docs.is_empty() {
+                                            let mut new_docs = String::new();
+                                            for line in docs.lines() {
+                                                new_docs.push_str("/// ");
+                                                new_docs.push_str(line);
+                                                new_docs.push_str("\n");
+                                            }
+                                            new_docs
+                                        } else {
+                                            String::new()
+                                        }
+                                    }
+                                    None => String::new(),
+                                };
+
+                                current_impl.content.push_str("```rust\n");
+                                current_impl.content.push_str(&docs);
+
                                 current_impl
                                     .content
                                     .push_str(&FunctionGenerator::generate_syntax(
                                         function,
                                         function_name,
                                     )?);
-                                current_impl.content.push_str("\n\n");
+                                current_impl.content.push_str("\n```\n\n");
                             }
                         }
                     }

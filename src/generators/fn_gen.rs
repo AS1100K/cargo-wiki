@@ -7,7 +7,7 @@ pub struct FunctionGenerator;
 
 impl FunctionGenerator {
     pub fn generate_syntax(function: &Function, name: &str) -> Result<String> {
-        let mut syntax = String::from("```rust\n");
+        let mut syntax = String::new();
         let (params, where_predicate) = GenericGenerator::generate_generics(&function.generics)?;
 
         let function_header = &function.header;
@@ -54,7 +54,7 @@ impl FunctionGenerator {
 
         syntax.push_str(&where_predicate);
 
-        syntax.push_str(";\n```");
+        syntax.push_str(";");
         Ok(syntax)
     }
 }
