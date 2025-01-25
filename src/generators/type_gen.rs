@@ -79,7 +79,7 @@ impl TypeGenerator {
     pub fn path_to_string(path: &Path) -> String {
         let mut path_string = String::new();
 
-        path_string.push_str(&path.name);
+        path_string.push_str(path.path.split("::").last().unwrap_or_default());
 
         if let Some(args) = &path.args {
             path_string.push_str(&GenericGenerator::generate_generic_args(args));
