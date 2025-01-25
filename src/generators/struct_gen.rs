@@ -5,6 +5,7 @@ use crate::generators::visibility_gen::VisibilityGenerator;
 use crate::generators::{ExternalCrates, Generator, Index, Paths};
 use anyhow::Result;
 use rustdoc_types::{Item, ItemEnum, StructKind};
+use super::impls_gen::ImplsGenerator;
 
 pub struct StructGenerator;
 
@@ -121,6 +122,8 @@ impl Generator for StructGenerator {
 
                 syntax.push_str("\n```");
 
+                let [impl1, impl2, impl3] = ImplsGenerator::generate_impls(impls, index)?;
+
                 return Ok(vec![
                     InnerModuleContent {
                         title: String::new(),
@@ -130,6 +133,9 @@ impl Generator for StructGenerator {
                         title: String::from("Fields"),
                         content: fields_section,
                     },
+                    impl1,
+                    impl2,
+                    impl3,
                 ]);
             }
             return Err(anyhow::Error::msg("Can't document a struct with no name"));
