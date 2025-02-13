@@ -274,17 +274,14 @@ impl<'a> ModuleGenerator<'a> {
                     });
                 }
                 ItemEnum::Enum(_) => {
-                    module_documentations
-                        .module_items
-                        .structs
-                        .push(ModuleField {
-                            name: item_name,
-                            link: format!(
-                                "./enum.{}{}",
-                                item_name, &self.configuration.default_link_file_extension
-                            ),
-                            description: &item_description,
-                        });
+                    module_documentations.module_items.enums.push(ModuleField {
+                        name: item_name,
+                        link: format!(
+                            "./enum.{}{}",
+                            item_name, &self.configuration.default_link_file_extension
+                        ),
+                        description: &item_description,
+                    });
 
                     path.push_str("/enum.");
                     path.push_str(item_name);
