@@ -1,0 +1,45 @@
+name: docs
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Rust
+        uses: rs-workspace/rust-toolchain@v0.2.0
+        with:
+          toolchain: nightly
+
+      - name: Build Cargo Wiki
+        run: cargo build
+
+      - name: Add feature `more_maybe_bounds`
+        run: |
+          x=`echo -n "#![feature(more_maybe_bounds)]"; cat src/lib.rs`
+          echo "$x" > src/lib.rs
+
+      - name: Generate Docs
+        run: |
+          cp target/debug/cargo-wiki .
+          ./cargo-wiki -- --all-features
+          find ./target/wiki/cargo_wiki -name "README.md" -type f -exec sh -c 'mv "$1" "$(dirname "$1")/index.md"' sh {} \;
+
+      - name: Convert markdown files to HTML
+        run: |
+          sudo apt install pandoc
+          mkdir html_docs
+          find target/wiki/cargo_wiki -name "*.md" -type f -exec sh -c 'mkdir -p "html_docs/$(dirname "${1#target/wiki/cargo_wiki/}")" && pandoc -s -f markdown -t html -o "html_docs/$(dirname "${1#target/wiki/cargo_wiki/}")/$(basename "${1%.*}").html" "$1"' sh {} \;
+
+      - name: Deploy docs preview to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./html_docs
