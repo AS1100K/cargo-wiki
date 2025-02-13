@@ -32,7 +32,7 @@ impl<'a> ModuleItems<'a> {
 
         // Constants
         if self.consts.len() > 0 {
-            module_information_string.push_str("## Constants\n\n");
+            module_information_string.push_str("\n## Constants\n\n");
             for field in &self.consts {
                 module_information_string.push_str(&field.to_string());
             }
@@ -40,7 +40,7 @@ impl<'a> ModuleItems<'a> {
 
         // Structs
         if self.structs.len() > 0 {
-            module_information_string.push_str("## Structs\n\n");
+            module_information_string.push_str("\n## Structs\n\n");
             for field in &self.structs {
                 module_information_string.push_str(&field.to_string());
             }
@@ -48,7 +48,7 @@ impl<'a> ModuleItems<'a> {
 
         // Enums
         if self.enums.len() > 0 {
-            module_information_string.push_str("## Enums\n\n");
+            module_information_string.push_str("\n## Enums\n\n");
             for field in &self.enums {
                 module_information_string.push_str(&field.to_string());
             }
@@ -56,7 +56,7 @@ impl<'a> ModuleItems<'a> {
 
         // Traits
         if self.traits.len() > 0 {
-            module_information_string.push_str("## Traits\n\n");
+            module_information_string.push_str("\n## Traits\n\n");
             for field in &self.traits {
                 module_information_string.push_str(&field.to_string());
             }
@@ -64,7 +64,7 @@ impl<'a> ModuleItems<'a> {
 
         // Functions
         if self.functions.len() > 0 {
-            module_information_string.push_str("## Functions\n\n");
+            module_information_string.push_str("\n## Functions\n\n");
             for field in &self.functions {
                 module_information_string.push_str(&field.to_string());
             }
@@ -72,7 +72,7 @@ impl<'a> ModuleItems<'a> {
 
         // Macros
         if self.macros.len() > 0 {
-            module_information_string.push_str("## Macros\n\n");
+            module_information_string.push_str("\n## Macros\n\n");
             for field in &self.macros {
                 module_information_string.push_str(&field.to_string());
             }
@@ -80,7 +80,7 @@ impl<'a> ModuleItems<'a> {
 
         // Re-exports
         if self.re_exports.len() > 0 {
-            module_information_string.push_str("## Re-exports\n\n");
+            module_information_string.push_str("\n## Re-exports\n\n");
             for field in &self.re_exports {
                 module_information_string.push_str(&field.to_string());
             }
