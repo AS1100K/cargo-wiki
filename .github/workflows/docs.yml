@@ -29,8 +29,7 @@ jobs:
       - name: Generate Docs
         run: |
           cp target/debug/cargo-wiki .
-          ./cargo-wiki -- --all-features
-          find ./target/wiki/cargo_wiki -name "README.md" -type f -exec sh -c 'mv "$1" "$(dirname "$1")/index.md"' sh {} \;
+          ./cargo-wiki -- --all-features --default-module-file-name "index" --default-link-file-extension ".html"
 
       - name: Convert markdown files to HTML
         run: |
