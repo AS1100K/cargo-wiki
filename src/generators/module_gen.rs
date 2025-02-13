@@ -6,8 +6,6 @@ use rustdoc_types::{Item, ItemEnum, ItemKind, Module};
 
 use super::enum_gen::EnumGenerator;
 
-pub const MODULE_FILE_NAME: &str = "README";
-
 #[derive(Default, Debug, Clone)]
 pub struct ModuleItems<'a> {
     pub modules: Vec<ModuleField<'a>>,
@@ -145,7 +143,6 @@ pub struct InnerModuleContent {
 pub struct ModuleGenerator<'a> {
     pub configuration: &'a Configuration,
     pub prefix_path: String,
-    pub module_file_name: &'a str,
     pub root_item: &'a Item,
     pub index: &'a Index,
     pub paths: &'a Paths,
@@ -156,7 +153,6 @@ impl<'a> ModuleGenerator<'a> {
     pub fn new(
         configuration: &'a Configuration,
         prefix_path: String,
-        module_file_name: &'a str,
         root_item: &'a Item,
         index: &'a Index,
         paths: &'a Paths,
@@ -165,7 +161,6 @@ impl<'a> ModuleGenerator<'a> {
         Self {
             configuration,
             prefix_path,
-            module_file_name,
             root_item,
             index,
             paths,
@@ -225,8 +220,8 @@ impl<'a> ModuleGenerator<'a> {
                             link: format!(
                                 "./{}/{}{}",
                                 item_name,
-                                self.module_file_name,
-                                &self.configuration.default_link_file_extension
+                                self.configuration.default_module_file_name,
+                                self.configuration.default_link_file_extension
                             ),
                             description: &item_description,
                         });
@@ -234,7 +229,6 @@ impl<'a> ModuleGenerator<'a> {
                     let new_module_generator = Self::new(
                         &self.configuration,
                         path,
-                        &self.module_file_name,
                         item,
                         self.index,
                         self.paths,
@@ -317,7 +311,7 @@ impl<'a> ModuleGenerator<'a> {
         }
 
         path.push_str("/");
-        path.push_str(self.module_file_name);
+        path.push_str(&self.configuration.default_module_file_name);
         path.push_str(".md");
 
         module_documentations.file_path = path;

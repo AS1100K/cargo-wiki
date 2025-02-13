@@ -1,5 +1,5 @@
 use crate::generators::module_gen::{
-    InnerModuleContent, ModuleContent, ModuleDocumentation, ModuleGenerator, MODULE_FILE_NAME,
+    InnerModuleContent, ModuleContent, ModuleDocumentation, ModuleGenerator,
 };
 use crate::{gen_path, save_file, Configuration, WikiStructure, WIKI_OUTPUT_PATH};
 use anyhow::Result;
@@ -26,7 +26,6 @@ pub fn generate_wiki(configuration: &Configuration, crate_type: Crate) -> Result
     let module_generator = ModuleGenerator::new(
         configuration,
         path,
-        MODULE_FILE_NAME,
         root_module,
         &crate_type.index,
         &crate_type.paths,

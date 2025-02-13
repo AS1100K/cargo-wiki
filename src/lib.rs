@@ -52,6 +52,9 @@ pub struct Configuration {
     /// links. This doesn't change file type.
     #[arg(long, default_value_t = String::from(".md"))]
     pub default_link_file_extension: String,
+    /// Sets the default file name for module files
+    #[arg(long, default_value_t = String::from("README"))]
+    pub default_module_file_name: String,
 }
 
 /// Markdown Flavor to be used
