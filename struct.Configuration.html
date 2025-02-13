@@ -241,7 +241,9 @@ class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> no_deps<span class="op">:</span> <span class="dt">bool</span><span class="op">,</span></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> markdown_flavor<span class="op">:</span> MarkdownFlavor<span class="op">,</span></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> structure<span class="op">:</span> WikiStructure<span class="op">,</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> default_link_file_extension<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> default_module_file_name<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <h2 id="fields">Fields</h2>
 <ul>
 <li><p><code>package</code> : <code>String</code></p>
@@ -264,6 +266,12 @@ packages.</p></li>
 <li><p><code>markdown_flavor</code> :
 <code>MarkdownFlavor</code></p></li>
 <li><p><code>structure</code> : <code>WikiStructure</code></p></li>
+<li><p><code>default_link_file_extension</code> :
+<code>String</code></p>
+<p>Sets the default file extension that will be used for all links. This
+doesn’t change file type.</p></li>
+<li><p><code>default_module_file_name</code> : <code>String</code></p>
+<p>Sets the default file name for module files</p></li>
 </ul>
 <h2 id="trait-implementations">Trait Implementations</h2>
 <p><code>impl&lt;T&gt; Borrow&lt;T&gt; for Configuration where     T: ?Sized</code></p>
