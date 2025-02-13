@@ -48,6 +48,10 @@ pub struct Configuration {
     // TODO: Add more arguments to support more features
     // refer: https://doc.rust-lang.org/cargo/commands/cargo-doc.html
     // refer: https://doc.rust-lang.org/cargo/commands/cargo-rustdoc.html
+    /// Sets the default file extension that will be used for all
+    /// links. This doesn't change file type.
+    #[arg(long, default_value_t = String::from(".md"))]
+    pub default_link_file_extension: String,
 }
 
 /// Markdown Flavor to be used

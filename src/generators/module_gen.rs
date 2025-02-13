@@ -222,7 +222,12 @@ impl<'a> ModuleGenerator<'a> {
                         .modules
                         .push(ModuleField {
                             name: item_name,
-                            link: format!("./{}/{}.md", item_name, self.module_file_name),
+                            link: format!(
+                                "./{}/{}{}",
+                                item_name,
+                                self.module_file_name,
+                                &self.configuration.default_link_file_extension
+                            ),
                             description: &item_description,
                         });
 
@@ -249,7 +254,10 @@ impl<'a> ModuleGenerator<'a> {
                         .structs
                         .push(ModuleField {
                             name: item_name,
-                            link: format!("./struct.{}.md", item_name),
+                            link: format!(
+                                "./struct.{}{}",
+                                item_name, &self.configuration.default_link_file_extension
+                            ),
                             description: &item_description,
                         });
 
@@ -277,7 +285,10 @@ impl<'a> ModuleGenerator<'a> {
                         .structs
                         .push(ModuleField {
                             name: item_name,
-                            link: format!("./enum.{}.md", item_name),
+                            link: format!(
+                                "./enum.{}{}",
+                                item_name, &self.configuration.default_link_file_extension
+                            ),
                             description: &item_description,
                         });
 
