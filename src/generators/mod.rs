@@ -3,6 +3,7 @@ use anyhow::Result;
 use rustdoc_types::{Id, Item, ItemSummary};
 use std::collections::HashMap;
 
+pub mod enum_gen;
 pub mod fn_gen;
 pub mod generic_gen;
 pub mod impls_gen;

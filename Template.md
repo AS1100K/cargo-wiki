@@ -7,8 +7,8 @@ This file is mainly for keeping format snippets that helps us overall design the
 1. [Syntax Block](#syntax-block)
     - [Struct](#struct-syntax-block)
     - [Struct Field](#struct-syntax-block)
-    - [Enum - TODO]()
-    - [Variant - TODO]()
+    - [Enum](#enum-syntax-block)
+    - [Variant](#enum-syntax-block)
     - [Union - TODO]()
     - [Trait - TODO]()
     - [Trait Alias - TODO]()
@@ -67,4 +67,30 @@ pub struct Crate {
 
     A single version number to be used in the future when making backwards incompatible changes to the JSON output.
 
+</details>
+
+## Enum Block
+
+```rust
+pub enum HelloWorld {
+    VariantOne,
+    VariantTuple(Box<HelloWorld>),
+    VariantStruct {
+        say_hello: bool
+    }
+}
+```
+
+<details>
+    <summary>Variants</summary>
+
+- `VariantOne`
+
+  Base Variant
+- `VariantTuple`
+
+  Tuple Variant
+- `VariantStruct`
+
+  Struct Variant
 </details>

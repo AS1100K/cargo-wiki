@@ -4,6 +4,8 @@ use crate::Configuration;
 use anyhow::Result;
 use rustdoc_types::{Item, ItemEnum, ItemKind, Module};
 
+use super::enum_gen::EnumGenerator;
+
 pub const MODULE_FILE_NAME: &str = "README";
 
 #[derive(Default, Debug, Clone)]
@@ -265,6 +267,34 @@ impl<'a> ModuleGenerator<'a> {
                     module_documentations.content.push(ModuleContent {
                         file_path: path.clone(),
                         kind: ItemKind::Struct,
+                        title: item_name,
+                        inner,
+                    });
+                }
+                ItemEnum::Enum(_) => {
+                    module_documentations
+                        .module_items
+                        .structs
+                        .push(ModuleField {
+                            name: item_name,
+                            link: format!("./enum.{}.md", item_name),
+                            description: &item_description,
+                        });
+
+                    path.push_str("/enum.");
+                    path.push_str(item_name);
+                    path.push_str(".md");
+
+                    let inner = EnumGenerator::generate_page(
+                        item,
+                        self.index,
+                        self.paths,
+                        self.external_crate,
+                    )?;
+
+                    module_documentations.content.push(ModuleContent {
+                        file_path: path.clone(),
+                        kind: ItemKind::Enum,
                         title: item_name,
                         inner,
                     });
