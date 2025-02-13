@@ -74,12 +74,12 @@ impl Generator for EnumGenerator {
             syntax.push_str("\t");
             syntax.push_str(variant_name);
 
-            variants_section.push_str("`");
+            variants_section.push_str("- `");
             variants_section.push_str(variant_name);
             variants_section.push_str("`");
 
             if let Some(variant_doc) = &variant.docs {
-                variants_section.push_str("\n\t");
+                variants_section.push_str("\n\n\t");
                 variants_section.push_str(variant_doc);
                 variants_section.push_str("\n");
             }
