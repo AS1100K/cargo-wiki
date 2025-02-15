@@ -13,6 +13,7 @@ use std::path::Path;
 
 #[cfg(feature = "doc_examples")]
 pub mod _examples;
+pub mod blocks;
 pub mod generators;
 pub mod rust_doc;
 pub mod wiki;
