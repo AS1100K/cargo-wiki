@@ -1,4 +1,4 @@
-use crate::{blocks::inline::Link, generators::generic_gen::GenericGenerator};
+use crate::{blocks::inline::Link, generators::generic_gen::GenericGenerator, Configuration};
 use rustdoc_types::{DynTrait, ItemKind, ItemSummary, Path, Type};
 
 use super::{ExternalCrates, Paths};
@@ -78,7 +78,12 @@ impl TypeGenerator {
         type_string
     }
 
-    pub fn type_to_link(type_: &Type, paths: &Paths, external_crates: &ExternalCrates) -> Link {
+    pub fn type_to_link(
+        type_: &Type,
+        paths: &Paths,
+        external_crates: &ExternalCrates,
+        config: &Configuration,
+    ) -> Link {
         match type_ {
             Type::ResolvedPath(path) => {
                 let item_summary = paths.get(&path.id);
@@ -86,26 +91,28 @@ impl TypeGenerator {
                 if let Some(item_summary) = item_summary {
                     let external_crate = external_crates.get(&item_summary.crate_id);
 
-                    if let Some(external_crate) = external_crate {
+                    let (root_url, is_this_crate) = if let Some(external_crate) = external_crate {
                         let root_url = if let Some(root_url) = &external_crate.html_root_url {
                             root_url.to_owned()
                         } else {
                             String::new()
                         };
 
-                        Link::new(
-                            TypeGenerator::path_to_string(path),
-                            format!(
-                                "{}{}",
-                                root_url,
-                                TypeGenerator::item_summary_to_url(item_summary)
-                            ),
-                        )
+                        (root_url, false)
                     } else {
-                        Link::empty()
-                    }
+                        (config.html_root_url.to_owned(), true)
+                    };
+
+                    Link::new(
+                        TypeGenerator::path_to_string(path),
+                        format!(
+                            "{}{}",
+                            root_url,
+                            TypeGenerator::item_summary_to_url(is_this_crate, item_summary, config)
+                        ),
+                    )
                 } else {
-                    Link::empty()
+                    Link::new(String::from("no item summary"), String::new())
                 }
             }
             Type::DynTrait(dyn_trait) => Link::empty(),
@@ -148,7 +155,11 @@ impl TypeGenerator {
         path_string
     }
 
-    pub fn item_summary_to_url(path: &ItemSummary) -> String {
+    pub fn item_summary_to_url(
+        is_this_crate: bool,
+        path: &ItemSummary,
+        config: &Configuration,
+    ) -> String {
         let mut url = String::new();
 
         for (i, path_piece) in path.path.iter().enumerate() {
@@ -159,21 +170,40 @@ impl TypeGenerator {
                 match &path.kind {
                     ItemKind::Module => {
                         url.push_str(path_piece);
-                        url.push_str("/index.html");
+
+                        // This is done, so that we can use custom extension
+                        // for only those links that refer back to us
+                        if is_this_crate {
+                            url.push_str("/");
+                            url.push_str(&config.default_module_file_name);
+                            url.push_str(&config.default_link_file_extension);
+                        } else {
+                            url.push_str("/index.html");
+                        }
                     }
                     ItemKind::ExternCrate => {}
                     ItemKind::Use => {}
                     ItemKind::Struct => {
                         url.push_str("struct.");
                         url.push_str(path_piece);
-                        url.push_str(".html");
+
+                        if is_this_crate {
+                            url.push_str(&config.default_link_file_extension);
+                        } else {
+                            url.push_str(".html");
+                        }
                     }
                     ItemKind::StructField => {}
                     ItemKind::Union => {}
                     ItemKind::Enum => {
                         url.push_str("enum.");
                         url.push_str(path_piece);
-                        url.push_str(".html");
+
+                        if is_this_crate {
+                            url.push_str(&config.default_link_file_extension);
+                        } else {
+                            url.push_str(".html");
+                        }
                     }
                     ItemKind::Variant => {}
                     ItemKind::Function => {}

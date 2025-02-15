@@ -56,6 +56,8 @@ pub struct Configuration {
     /// Sets the default file name for module files
     #[arg(long, default_value_t = String::from("README"))]
     pub default_module_file_name: String,
+    #[arg(short = 'r', long, default_value_t = String::from("/"))]
+    pub html_root_url: String,
 }
 
 /// Markdown Flavor to be used

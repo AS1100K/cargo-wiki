@@ -14,6 +14,7 @@ impl Generator for EnumGenerator {
         index: &Index,
         paths: &Paths,
         external_crates: &ExternalCrates,
+        config: &Configuration,
     ) -> Result<Document> {
         let ItemEnum::Enum(rustdoc_types::Enum {
             generics,

@@ -5,6 +5,7 @@ use crate::generators::generic_gen::GenericGenerator;
 use crate::generators::type_gen::TypeGenerator;
 use crate::generators::visibility_gen::VisibilityGenerator;
 use crate::generators::{ExternalCrates, Generator, Index, Paths};
+use crate::Configuration;
 use anyhow::Result;
 use rustdoc_types::{Item, ItemEnum, StructKind};
 
@@ -18,6 +19,7 @@ impl Generator for StructGenerator {
         index: &Index,
         paths: &Paths,
         external_crates: &ExternalCrates,
+        config: &Configuration,
     ) -> Result<Document> {
         if let ItemEnum::Struct(rustdoc_types::Struct {
             kind,
@@ -114,6 +116,7 @@ impl Generator for StructGenerator {
                                             type_,
                                             paths,
                                             external_crates,
+                                            config,
                                         )),
                                     Text::from(docs),
                                 );
@@ -122,9 +125,12 @@ impl Generator for StructGenerator {
                                     GroupBlock::new()
                                         .push_c(CodeSpan::from(field_name))
                                         .push_c(Text::from(" : "))
-                                        .push_c(CodeSpan::from(TypeGenerator::type_to_string(
+                                        .push_c(TypeGenerator::type_to_link(
                                             type_,
-                                        ))),
+                                            paths,
+                                            external_crates,
+                                            config,
+                                        )),
                                     EmptyElement,
                                 );
                             }
