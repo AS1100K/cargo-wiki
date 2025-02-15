@@ -1,6 +1,6 @@
 use super::{ExternalCrates, Paths};
 use crate::{
-    blocks::inline::{InlineGroup, Link},
+    blocks::inline::{CodeSpan, InlineGroup, Link},
     generators::generic_gen::GenericGenerator,
     Configuration,
 };
@@ -118,31 +118,25 @@ impl TypeGenerator {
                     InlineGroup::new()
                 }
             }
-            Type::DynTrait(dyn_trait) => InlineGroup::new(),
-            Type::Generic(generic) => InlineGroup::new(),
-            Type::Primitive(primitive) => InlineGroup::new(),
-            Type::FunctionPointer(function_pointer) => InlineGroup::new(),
-            Type::Tuple(tuples) => InlineGroup::new(),
-            Type::Slice(slice) => InlineGroup::new(),
-            Type::Array { type_, len } => InlineGroup::new(),
-            Type::Pat {
-                type_,
-                __pat_unstable_do_not_use,
-            } => InlineGroup::new(),
-            Type::ImplTrait(generic_bounds) => InlineGroup::new(),
-            Type::Infer => InlineGroup::new(),
-            Type::RawPointer { is_mutable, type_ } => InlineGroup::new(),
-            Type::BorrowedRef {
-                lifetime,
-                is_mutable,
-                type_,
-            } => InlineGroup::new(),
-            Type::QualifiedPath {
-                name,
-                args,
-                self_type,
-                trait_,
-            } => InlineGroup::new(),
+            Type::Slice(slice) => InlineGroup::new()
+                .push_c(CodeSpan::from("["))
+                .push_c(TypeGenerator::type_to_link(
+                    slice,
+                    paths,
+                    external_crates,
+                    config,
+                ))
+                .push_c(CodeSpan::from("]")),
+            Type::Array { type_, len } => InlineGroup::new()
+                .push_c(CodeSpan::from("["))
+                .push_c(TypeGenerator::type_to_link(
+                    type_,
+                    paths,
+                    external_crates,
+                    config,
+                ))
+                .push_c(CodeSpan::from(format!("; {}]", len))),
+            _ => InlineGroup::new().push_c(CodeSpan::from(TypeGenerator::type_to_string(type_))),
         }
     }
 
@@ -184,48 +178,27 @@ impl TypeGenerator {
                             url.push_str("/index.html");
                         }
                     }
-                    ItemKind::ExternCrate => {}
-                    ItemKind::Use => {}
                     ItemKind::Struct => {
                         url.push_str("struct.");
                         url.push_str(path_piece);
-
-                        if is_this_crate {
-                            url.push_str(&config.default_link_file_extension);
-                        } else {
-                            url.push_str(".html");
-                        }
                     }
-                    ItemKind::StructField => {}
-                    ItemKind::Union => {}
                     ItemKind::Enum => {
                         url.push_str("enum.");
                         url.push_str(path_piece);
-
-                        if is_this_crate {
-                            url.push_str(&config.default_link_file_extension);
-                        } else {
-                            url.push_str(".html");
-                        }
                     }
-                    ItemKind::Variant => {}
-                    ItemKind::Function => {}
-                    ItemKind::TypeAlias => {}
-                    ItemKind::Constant => {}
-                    ItemKind::Trait => {}
-                    ItemKind::TraitAlias => {}
-                    ItemKind::Impl => {}
-                    ItemKind::Static => {}
-                    ItemKind::ExternType => {}
-                    ItemKind::Macro => {}
-                    ItemKind::ProcAttribute => {}
-                    ItemKind::ProcDerive => {}
-                    ItemKind::AssocConst => {}
-                    ItemKind::AssocType => {}
-                    ItemKind::Primitive => {}
-                    ItemKind::Keyword => {}
+                    ItemKind::Trait => {
+                        url.push_str("trait.");
+                        url.push_str(path_piece);
+                    }
+                    _ => {}
                 }
             }
+        }
+
+        if is_this_crate {
+            url.push_str(&config.default_link_file_extension);
+        } else {
+            url.push_str(".html");
         }
 
         url
