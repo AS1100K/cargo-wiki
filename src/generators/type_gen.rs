@@ -1,5 +1,10 @@
-use crate::generators::generic_gen::GenericGenerator;
+use crate::{
+    blocks::{inline::Link, Block, EmptyElement},
+    generators::generic_gen::GenericGenerator,
+};
 use rustdoc_types::{DynTrait, Path, Type};
+
+use super::{ExternalCrates, Index, Paths};
 
 pub struct TypeGenerator;
 
@@ -74,6 +79,75 @@ impl TypeGenerator {
         }
 
         type_string
+    }
+
+    pub fn type_to_link(
+        type_: &Type,
+        index: Index,
+        paths: Paths,
+        external_crates: ExternalCrates,
+    ) -> Block {
+        match type_ {
+            Type::ResolvedPath(path) => {
+                let item_summary = paths.get(&path.id);
+                    
+                if let Some(item_summary) = item_summary {
+                } else {
+                    Box::new(EmptyElement)
+                }
+            }
+            Type::DynTrait(dyn_trait) => {
+                todo!()
+            }
+            Type::Generic(generic) => {
+                todo!()
+            }
+            Type::Primitive(primitive) => {
+                todo!()
+            }
+            Type::FunctionPointer(function_pointer) => {
+                todo!()
+            }
+            Type::Tuple(tuples) => {
+                todo!()
+            }
+            Type::Slice(slice) => {
+                todo!()
+            }
+            Type::Array { type_, len } => {
+                todo!()
+            }
+            Type::Pat {
+                type_,
+                __pat_unstable_do_not_use,
+            } => {
+                todo!()
+            }
+            Type::ImplTrait(generic_bounds) => {
+                todo!()
+            }
+            Type::Infer => {
+                todo!()
+            }
+            Type::RawPointer { is_mutable, type_ } => {
+                todo!()
+            }
+            Type::BorrowedRef {
+                lifetime,
+                is_mutable,
+                type_,
+            } => {
+                todo!()
+            }
+            Type::QualifiedPath {
+                name,
+                args,
+                self_type,
+                trait_,
+            } => {
+                todo!()
+            }
+        }
     }
 
     pub fn path_to_string(path: &Path) -> String {
