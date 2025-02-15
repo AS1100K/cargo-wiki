@@ -239,7 +239,10 @@ class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> paths<span class="op">:</span> <span class="op">&amp;</span><span class="ot">&#39;a</span> Paths<span class="op">,</span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> external_crate<span class="op">:</span> <span class="op">&amp;</span><span class="ot">&#39;a</span> ExternalCrates<span class="op">,</span></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<h2 id="fields">Fields</h2>
+<details close>
+<summary>
+Fields
+</summary>
 <ul>
 <li><code>configuration</code> : <code>&amp;'a Configuration</code></li>
 <li><code>prefix_path</code> : <code>String</code></li>
@@ -249,6 +252,7 @@ class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="
 <li><code>external_crate</code> :
 <code>&amp;'a ExternalCrates</code></li>
 </ul>
+</details>
 <h2 id="implementations">Implementations</h2>
 <div class="sourceCode" id="cb2"><pre
 class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> new(configuration<span class="op">:</span> <span class="op">&amp;</span><span class="ot">&#39;a</span> Configuration<span class="op">,</span> prefix_path<span class="op">:</span> <span class="dt">String</span><span class="op">,</span> root_item<span class="op">:</span> <span class="op">&amp;</span><span class="ot">&#39;a</span> Item<span class="op">,</span> index<span class="op">:</span> <span class="op">&amp;</span><span class="ot">&#39;a</span> <span class="bu">Index</span><span class="op">,</span> paths<span class="op">:</span> <span class="op">&amp;</span><span class="ot">&#39;a</span> Paths<span class="op">,</span> external_crate<span class="op">:</span> <span class="op">&amp;</span><span class="ot">&#39;a</span> ExternalCrates) <span class="op">-&gt;</span> <span class="dt">Self</span><span class="op">;</span></span></code></pre></div>

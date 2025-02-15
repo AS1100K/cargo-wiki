@@ -236,13 +236,18 @@ class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> value<span class="op">:</span> U<span class="op">,</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> slice<span class="op">:</span> <span class="op">&amp;</span><span class="ot">&#39;a</span> [<span class="dt">u32</span><span class="op">;</span> <span class="dv">50</span>]<span class="op">,</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<h2 id="fields">Fields</h2>
+<details close>
+<summary>
+Fields
+</summary>
 <ul>
 <li><p><code>reference</code> : <code>&amp;'a T</code></p>
 <p>This is a reference</p></li>
 <li><p><code>value</code> : <code>U</code></p></li>
 <li><p><code>slice</code> : <code>&amp;'a [u32; 50]</code></p></li>
 </ul>
+</details>
+<h2 id="implementations">Implementations</h2>
 <h2 id="trait-implementations">Trait Implementations</h2>
 <p><code>impl&lt;T&gt; Borrow&lt;T&gt; for ComplexStruct&lt;'a, T, U&gt; where     T: ?Sized</code></p>
 <div class="sourceCode" id="cb2"><pre

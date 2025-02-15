@@ -238,7 +238,10 @@ class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> content<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span>ModuleContent<span class="op">&lt;</span><span class="ot">&#39;a</span><span class="op">&gt;&gt;,</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> inner_modules<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span>ModuleDocumentation<span class="op">&lt;</span><span class="ot">&#39;a</span><span class="op">&gt;&gt;,</span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<h2 id="fields">Fields</h2>
+<details close>
+<summary>
+Fields
+</summary>
 <ul>
 <li><code>file_path</code> : <code>String</code></li>
 <li><code>title</code> : <code>&amp;'a str</code></li>
@@ -248,6 +251,7 @@ class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="
 <li><code>inner_modules</code> :
 <code>Vec&lt;ModuleDocumentation&lt;'a&gt;&gt;</code></li>
 </ul>
+</details>
 <h2 id="implementations">Implementations</h2>
 <div class="sourceCode" id="cb2"><pre
 class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> generate_docs(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span><span class="op">,</span> configuration<span class="op">:</span> <span class="op">&amp;</span>Configuration) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span><span class="dt">String</span><span class="op">&gt;;</span></span></code></pre></div>
@@ -286,21 +290,24 @@ class="sourceCode rust"><code class="sourceCode rust"><span id="cb10-1"><a href=
 class="sourceCode rust"><code class="sourceCode rust"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> to_owned(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span>) <span class="op">-&gt;</span> T<span class="op">;</span></span></code></pre></div>
 <div class="sourceCode" id="cb12"><pre
 class="sourceCode rust"><code class="sourceCode rust"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> clone_into(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span><span class="op">,</span> target<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> T)<span class="op">;</span></span></code></pre></div>
-<p><code>impl&lt;'a&gt; Default for ModuleDocumentation&lt;'a&gt;</code></p>
+<p><code>impl&lt;T&gt; DynClone for ModuleDocumentation&lt;'a&gt; where     T: Clone</code></p>
 <div class="sourceCode" id="cb13"><pre
-class="sourceCode rust"><code class="sourceCode rust"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> default() <span class="op">-&gt;</span> ModuleDocumentation<span class="op">&lt;</span><span class="ot">&#39;a</span><span class="op">&gt;;</span></span></code></pre></div>
-<p><code>impl&lt;'a&gt; Debug for ModuleDocumentation&lt;'a&gt;</code></p>
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> __clone_box(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span><span class="op">,</span> _<span class="op">:</span> Private) <span class="op">-&gt;</span> <span class="op">*</span><span class="kw">mut</span> ()<span class="op">;</span></span></code></pre></div>
+<p><code>impl&lt;'a&gt; Default for ModuleDocumentation&lt;'a&gt;</code></p>
 <div class="sourceCode" id="cb14"><pre
-class="sourceCode rust"><code class="sourceCode rust"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> fmt(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span><span class="op">,</span> f<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> Formatter<span class="op">&lt;</span><span class="ot">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">;</span></span></code></pre></div>
-<p><code>impl&lt;'a&gt; Clone for ModuleDocumentation&lt;'a&gt;</code></p>
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> default() <span class="op">-&gt;</span> ModuleDocumentation<span class="op">&lt;</span><span class="ot">&#39;a</span><span class="op">&gt;;</span></span></code></pre></div>
+<p><code>impl&lt;'a&gt; Debug for ModuleDocumentation&lt;'a&gt;</code></p>
 <div class="sourceCode" id="cb15"><pre
-class="sourceCode rust"><code class="sourceCode rust"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> clone(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span>) <span class="op">-&gt;</span> ModuleDocumentation<span class="op">&lt;</span><span class="ot">&#39;a</span><span class="op">&gt;;</span></span></code></pre></div>
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> fmt(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span><span class="op">,</span> f<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> Formatter<span class="op">&lt;</span><span class="ot">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">;</span></span></code></pre></div>
+<p><code>impl&lt;'a&gt; Clone for ModuleDocumentation&lt;'a&gt;</code></p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> clone(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span>) <span class="op">-&gt;</span> ModuleDocumentation<span class="op">&lt;</span><span class="ot">&#39;a</span><span class="op">&gt;;</span></span></code></pre></div>
 <h2 id="auto-trait-implementations">Auto Trait Implementations</h2>
-<p><code>impl&lt;'a&gt; Send for ModuleDocumentation&lt;'a&gt;</code></p>
-<p><code>impl&lt;'a&gt; Sync for ModuleDocumentation&lt;'a&gt;</code></p>
+<p><code>impl&lt;'a&gt; !Send for ModuleDocumentation&lt;'a&gt;</code></p>
+<p><code>impl&lt;'a&gt; !Sync for ModuleDocumentation&lt;'a&gt;</code></p>
 <p><code>impl&lt;'a&gt; Freeze for ModuleDocumentation&lt;'a&gt;</code></p>
 <p><code>impl&lt;'a&gt; Unpin for ModuleDocumentation&lt;'a&gt;</code></p>
-<p><code>impl&lt;'a&gt; UnwindSafe for ModuleDocumentation&lt;'a&gt;</code></p>
-<p><code>impl&lt;'a&gt; RefUnwindSafe for ModuleDocumentation&lt;'a&gt;</code></p>
+<p><code>impl&lt;'a&gt; !UnwindSafe for ModuleDocumentation&lt;'a&gt;</code></p>
+<p><code>impl&lt;'a&gt; !RefUnwindSafe for ModuleDocumentation&lt;'a&gt;</code></p>
 </body>
 </html>

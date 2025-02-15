@@ -232,6 +232,12 @@
 <h1 id="structgenerator">StructGenerator</h1>
 <div class="sourceCode" id="cb1"><pre
 class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> StructGenerator<span class="op">;</span></span></code></pre></div>
+<details close>
+<summary>
+Fields
+</summary>
+</details>
+<h2 id="implementations">Implementations</h2>
 <h2 id="trait-implementations">Trait Implementations</h2>
 <p><code>impl&lt;T&gt; Borrow&lt;T&gt; for StructGenerator where     T: ?Sized</code></p>
 <div class="sourceCode" id="cb2"><pre
@@ -263,7 +269,7 @@ class="sourceCode rust"><code class="sourceCode rust"><span id="cb8-1"><a href="
 <div class="sourceCode" id="cb9"><pre
 class="sourceCode rust"><code class="sourceCode rust"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">/// Generate Code Syntax for `Struct`. See [Template.html](https://github.com/AS1100K/cargo-wiki/blob/main/Template.md#struct-syntax-block)</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">/// for more info.</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> generate_page(item<span class="op">:</span> <span class="op">&amp;</span>Item<span class="op">,</span> index<span class="op">:</span> <span class="op">&amp;</span><span class="bu">Index</span><span class="op">,</span> paths<span class="op">:</span> <span class="op">&amp;</span>Paths<span class="op">,</span> external_crates<span class="op">:</span> <span class="op">&amp;</span>ExternalCrates) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span><span class="dt">Vec</span><span class="op">&lt;</span>InnerModuleContent<span class="op">&gt;&gt;;</span></span></code></pre></div>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> generate_page(item<span class="op">:</span> <span class="op">&amp;</span>Item<span class="op">,</span> index<span class="op">:</span> <span class="op">&amp;</span><span class="bu">Index</span><span class="op">,</span> paths<span class="op">:</span> <span class="op">&amp;</span>Paths<span class="op">,</span> external_crates<span class="op">:</span> <span class="op">&amp;</span>ExternalCrates) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>Document<span class="op">&gt;;</span></span></code></pre></div>
 <h2 id="auto-trait-implementations">Auto Trait Implementations</h2>
 <p><code>impl Send for StructGenerator</code></p>
 <p><code>impl Sync for StructGenerator</code></p>

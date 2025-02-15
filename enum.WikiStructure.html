@@ -236,7 +236,10 @@ class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    SingleFile<span class="op">,</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>Structure of the wiki</p>
-<h2 id="variants">Variants</h2>
+<details close>
+<summary>
+Variants
+</summary>
 <ul>
 <li><p><code>Directory</code></p>
 <p>Structure via directory. This will create multiple
@@ -244,6 +247,8 @@ directories.</p></li>
 <li><p><code>SingleFile</code></p>
 <p>A Single file for the entire crate.</p></li>
 </ul>
+</details>
+<h2 id="implementations">Implementations</h2>
 <h2 id="trait-implementations">Trait Implementations</h2>
 <p><code>impl&lt;T&gt; Borrow&lt;T&gt; for WikiStructure where     T: ?Sized</code></p>
 <div class="sourceCode" id="cb2"><pre
@@ -279,21 +284,24 @@ class="sourceCode rust"><code class="sourceCode rust"><span id="cb9-1"><a href="
 class="sourceCode rust"><code class="sourceCode rust"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> to_owned(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span>) <span class="op">-&gt;</span> T<span class="op">;</span></span></code></pre></div>
 <div class="sourceCode" id="cb11"><pre
 class="sourceCode rust"><code class="sourceCode rust"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> clone_into(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span><span class="op">,</span> target<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> T)<span class="op">;</span></span></code></pre></div>
-<p><code>impl Debug for WikiStructure</code></p>
+<p><code>impl&lt;T&gt; DynClone for WikiStructure where     T: Clone</code></p>
 <div class="sourceCode" id="cb12"><pre
-class="sourceCode rust"><code class="sourceCode rust"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> fmt(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span><span class="op">,</span> f<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> Formatter<span class="op">&lt;</span><span class="ot">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">;</span></span></code></pre></div>
-<p><code>impl ValueEnum for WikiStructure</code></p>
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> __clone_box(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span><span class="op">,</span> _<span class="op">:</span> Private) <span class="op">-&gt;</span> <span class="op">*</span><span class="kw">mut</span> ()<span class="op">;</span></span></code></pre></div>
+<p><code>impl Debug for WikiStructure</code></p>
 <div class="sourceCode" id="cb13"><pre
-class="sourceCode rust"><code class="sourceCode rust"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> value_variants<span class="op">&lt;</span><span class="ot">&#39;a</span><span class="op">&gt;</span>() <span class="op">-&gt;</span> <span class="op">&amp;</span><span class="ot">&#39;a</span> [<span class="dt">Self</span>]<span class="op">;</span></span></code></pre></div>
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> fmt(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span><span class="op">,</span> f<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> Formatter<span class="op">&lt;</span><span class="ot">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">;</span></span></code></pre></div>
+<p><code>impl ValueEnum for WikiStructure</code></p>
 <div class="sourceCode" id="cb14"><pre
-class="sourceCode rust"><code class="sourceCode rust"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> to_possible_value<span class="op">&lt;</span><span class="ot">&#39;a</span><span class="op">&gt;</span>(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span>) <span class="op">-&gt;</span> <span class="dt">Option</span><span class="op">&lt;</span>PossibleValue<span class="op">&gt;;</span></span></code></pre></div>
-<p><code>impl Clone for WikiStructure</code></p>
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> value_variants<span class="op">&lt;</span><span class="ot">&#39;a</span><span class="op">&gt;</span>() <span class="op">-&gt;</span> <span class="op">&amp;</span><span class="ot">&#39;a</span> [<span class="dt">Self</span>]<span class="op">;</span></span></code></pre></div>
 <div class="sourceCode" id="cb15"><pre
-class="sourceCode rust"><code class="sourceCode rust"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> clone(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span>) <span class="op">-&gt;</span> WikiStructure<span class="op">;</span></span></code></pre></div>
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> to_possible_value<span class="op">&lt;</span><span class="ot">&#39;a</span><span class="op">&gt;</span>(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span>) <span class="op">-&gt;</span> <span class="dt">Option</span><span class="op">&lt;</span>PossibleValue<span class="op">&gt;;</span></span></code></pre></div>
+<p><code>impl Clone for WikiStructure</code></p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> clone(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span>) <span class="op">-&gt;</span> WikiStructure<span class="op">;</span></span></code></pre></div>
 <p><code>impl StructuralPartialEq for WikiStructure</code></p>
 <p><code>impl PartialEq for WikiStructure</code></p>
-<div class="sourceCode" id="cb16"><pre
-class="sourceCode rust"><code class="sourceCode rust"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> eq(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span><span class="op">,</span> other<span class="op">:</span> <span class="op">&amp;</span>WikiStructure) <span class="op">-&gt;</span> <span class="dt">bool</span><span class="op">;</span></span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> eq(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span><span class="op">,</span> other<span class="op">:</span> <span class="op">&amp;</span>WikiStructure) <span class="op">-&gt;</span> <span class="dt">bool</span><span class="op">;</span></span></code></pre></div>
 <h2 id="auto-trait-implementations">Auto Trait Implementations</h2>
 <p><code>impl Send for WikiStructure</code></p>
 <p><code>impl Sync for WikiStructure</code></p>

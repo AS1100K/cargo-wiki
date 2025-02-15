@@ -242,12 +242,17 @@ class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* private fields */</span></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>Uses Higher-Rank Trait Bounds (HRTBs)</p>
-<h2 id="fields">Fields</h2>
+<details close>
+<summary>
+Fields
+</summary>
 <ul>
 <li><code>reference</code> : <code>&amp;'a T</code></li>
 <li><code>value</code> : <code>U</code></li>
 <li><code>transformer</code> : <code>F</code></li>
 </ul>
+</details>
+<h2 id="implementations">Implementations</h2>
 <h2 id="trait-implementations">Trait Implementations</h2>
 <p><code>impl&lt;T&gt; Borrow&lt;T&gt; for HRTBPredicateStruct&lt;'a, T, U, F&gt; where     T: ?Sized</code></p>
 <div class="sourceCode" id="cb2"><pre

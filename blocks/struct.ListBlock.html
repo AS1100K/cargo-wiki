@@ -234,6 +234,11 @@
 class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> ListBlock <span class="op">{</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* private fields */</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<details close>
+<summary>
+Fields
+</summary>
+</details>
 <h2 id="implementations">Implementations</h2>
 <div class="sourceCode" id="cb2"><pre
 class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> new_ordered_list() <span class="op">-&gt;</span> <span class="dt">Self</span><span class="op">;</span></span></code></pre></div>
@@ -256,31 +261,48 @@ class="sourceCode rust"><code class="sourceCode rust"><span id="cb6-1"><a href="
 <p><code>impl&lt;T&gt; BorrowMut&lt;T&gt; for ListBlock where     T: ?Sized</code></p>
 <div class="sourceCode" id="cb7"><pre
 class="sourceCode rust"><code class="sourceCode rust"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> borrow_mut(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="dt">Self</span>) <span class="op">-&gt;</span> <span class="op">&amp;</span><span class="kw">mut</span> T<span class="op">;</span></span></code></pre></div>
-<p><code>impl&lt;T, U&gt; Into&lt;U&gt; for ListBlock where     U: From&lt;T&gt;</code></p>
+<p><code>impl&lt;T&gt; CloneToUninit for ListBlock where     T: Clone</code></p>
 <div class="sourceCode" id="cb8"><pre
-class="sourceCode rust"><code class="sourceCode rust"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">/// Calls `U::from(self)`.</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">/// </span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">/// That is, this conversion is whatever the implementation of</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">/// &lt;code&gt;[From]&amp;lt;T&amp;gt; for U&lt;/code&gt; chooses to do.</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> into(<span class="kw">self</span><span class="op">:</span> <span class="dt">Self</span>) <span class="op">-&gt;</span> U<span class="op">;</span></span></code></pre></div>
-<p><code>impl&lt;T&gt; From&lt;T&gt; for ListBlock</code></p>
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">unsafe</span> <span class="kw">fn</span> clone_to_uninit(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span><span class="op">,</span> dst<span class="op">:</span> <span class="op">*</span><span class="kw">mut</span> <span class="dt">u8</span>)<span class="op">;</span></span></code></pre></div>
+<p><code>impl&lt;T, U&gt; Into&lt;U&gt; for ListBlock where     U: From&lt;T&gt;</code></p>
 <div class="sourceCode" id="cb9"><pre
-class="sourceCode rust"><code class="sourceCode rust"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">/// Returns the argument unchanged.</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> from(t<span class="op">:</span> T) <span class="op">-&gt;</span> T<span class="op">;</span></span></code></pre></div>
-<p><code>impl&lt;T, U&gt; TryInto&lt;U&gt; for ListBlock where     U: TryFrom&lt;T&gt;</code></p>
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">/// Calls `U::from(self)`.</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">/// </span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">/// That is, this conversion is whatever the implementation of</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">/// &lt;code&gt;[From]&amp;lt;T&amp;gt; for U&lt;/code&gt; chooses to do.</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> into(<span class="kw">self</span><span class="op">:</span> <span class="dt">Self</span>) <span class="op">-&gt;</span> U<span class="op">;</span></span></code></pre></div>
+<p><code>impl&lt;T&gt; From&lt;T&gt; for ListBlock</code></p>
 <div class="sourceCode" id="cb10"><pre
-class="sourceCode rust"><code class="sourceCode rust"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> try_into(<span class="kw">self</span><span class="op">:</span> <span class="dt">Self</span>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>U<span class="op">,</span> <span class="op">&gt;;</span></span></code></pre></div>
-<p><code>impl&lt;T, U&gt; TryFrom&lt;U&gt; for ListBlock where     U: Into&lt;T&gt;</code></p>
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">/// Returns the argument unchanged.</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> from(t<span class="op">:</span> T) <span class="op">-&gt;</span> T<span class="op">;</span></span></code></pre></div>
+<p><code>impl&lt;T, U&gt; TryInto&lt;U&gt; for ListBlock where     U: TryFrom&lt;T&gt;</code></p>
 <div class="sourceCode" id="cb11"><pre
-class="sourceCode rust"><code class="sourceCode rust"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> try_from(value<span class="op">:</span> U) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>T<span class="op">,</span> <span class="op">&gt;;</span></span></code></pre></div>
-<p><code>impl&lt;T&gt; Any for ListBlock where     T: 'static + ?Sized</code></p>
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> try_into(<span class="kw">self</span><span class="op">:</span> <span class="dt">Self</span>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>U<span class="op">,</span> <span class="op">&gt;;</span></span></code></pre></div>
+<p><code>impl&lt;T, U&gt; TryFrom&lt;U&gt; for ListBlock where     U: Into&lt;T&gt;</code></p>
 <div class="sourceCode" id="cb12"><pre
-class="sourceCode rust"><code class="sourceCode rust"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> type_id(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span>) <span class="op">-&gt;</span> TypeId<span class="op">;</span></span></code></pre></div>
-<p><code>impl ToMarkdown for ListBlock</code></p>
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> try_from(value<span class="op">:</span> U) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>T<span class="op">,</span> <span class="op">&gt;;</span></span></code></pre></div>
+<p><code>impl&lt;T&gt; Any for ListBlock where     T: 'static + ?Sized</code></p>
 <div class="sourceCode" id="cb13"><pre
-class="sourceCode rust"><code class="sourceCode rust"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> expects_new_line(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span>) <span class="op">-&gt;</span> <span class="dt">bool</span><span class="op">;</span></span></code></pre></div>
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> type_id(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span>) <span class="op">-&gt;</span> TypeId<span class="op">;</span></span></code></pre></div>
+<p><code>impl&lt;T&gt; ToOwned for ListBlock where     T: Clone</code></p>
 <div class="sourceCode" id="cb14"><pre
-class="sourceCode rust"><code class="sourceCode rust"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> to_markdown(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span>) <span class="op">-&gt;</span> <span class="dt">String</span><span class="op">;</span></span></code></pre></div>
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> to_owned(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span>) <span class="op">-&gt;</span> T<span class="op">;</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> clone_into(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span><span class="op">,</span> target<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> T)<span class="op">;</span></span></code></pre></div>
+<p><code>impl&lt;T&gt; DynClone for ListBlock where     T: Clone</code></p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> __clone_box(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span><span class="op">,</span> _<span class="op">:</span> Private) <span class="op">-&gt;</span> <span class="op">*</span><span class="kw">mut</span> ()<span class="op">;</span></span></code></pre></div>
+<p><code>impl Debug for ListBlock</code></p>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> fmt(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span><span class="op">,</span> f<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> Formatter<span class="op">&lt;</span><span class="ot">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">;</span></span></code></pre></div>
+<p><code>impl Clone for ListBlock</code></p>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> clone(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span>) <span class="op">-&gt;</span> ListBlock<span class="op">;</span></span></code></pre></div>
+<p><code>impl ToMarkdown for ListBlock</code></p>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> expects_new_line(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span>) <span class="op">-&gt;</span> <span class="dt">bool</span><span class="op">;</span></span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> to_markdown(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span>) <span class="op">-&gt;</span> <span class="dt">String</span><span class="op">;</span></span></code></pre></div>
 <h2 id="auto-trait-implementations">Auto Trait Implementations</h2>
 <p><code>impl !Send for ListBlock</code></p>
 <p><code>impl !Sync for ListBlock</code></p>
