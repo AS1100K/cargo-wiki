@@ -1,7 +1,10 @@
-use crate::{blocks::inline::Link, generators::generic_gen::GenericGenerator, Configuration};
-use rustdoc_types::{DynTrait, ItemKind, ItemSummary, Path, Type};
-
 use super::{ExternalCrates, Paths};
+use crate::{
+    blocks::inline::{InlineGroup, Link},
+    generators::generic_gen::GenericGenerator,
+    Configuration,
+};
+use rustdoc_types::{DynTrait, ItemKind, ItemSummary, Path, Type};
 
 pub struct TypeGenerator;
 
@@ -83,7 +86,7 @@ impl TypeGenerator {
         paths: &Paths,
         external_crates: &ExternalCrates,
         config: &Configuration,
-    ) -> Link {
+    ) -> InlineGroup {
         match type_ {
             Type::ResolvedPath(path) => {
                 let item_summary = paths.get(&path.id);
@@ -103,43 +106,43 @@ impl TypeGenerator {
                         (config.html_root_url.to_owned(), true)
                     };
 
-                    Link::new(
+                    InlineGroup::new().push_c(Link::new(
                         TypeGenerator::path_to_string(path),
                         format!(
                             "{}{}",
                             root_url,
                             TypeGenerator::item_summary_to_url(is_this_crate, item_summary, config)
                         ),
-                    )
+                    ))
                 } else {
-                    Link::new(String::from("no item summary"), String::new())
+                    InlineGroup::new()
                 }
             }
-            Type::DynTrait(dyn_trait) => Link::empty(),
-            Type::Generic(generic) => Link::empty(),
-            Type::Primitive(primitive) => Link::empty(),
-            Type::FunctionPointer(function_pointer) => Link::empty(),
-            Type::Tuple(tuples) => Link::empty(),
-            Type::Slice(slice) => Link::empty(),
-            Type::Array { type_, len } => Link::empty(),
+            Type::DynTrait(dyn_trait) => InlineGroup::new(),
+            Type::Generic(generic) => InlineGroup::new(),
+            Type::Primitive(primitive) => InlineGroup::new(),
+            Type::FunctionPointer(function_pointer) => InlineGroup::new(),
+            Type::Tuple(tuples) => InlineGroup::new(),
+            Type::Slice(slice) => InlineGroup::new(),
+            Type::Array { type_, len } => InlineGroup::new(),
             Type::Pat {
                 type_,
                 __pat_unstable_do_not_use,
-            } => Link::empty(),
-            Type::ImplTrait(generic_bounds) => Link::empty(),
-            Type::Infer => Link::empty(),
-            Type::RawPointer { is_mutable, type_ } => Link::empty(),
+            } => InlineGroup::new(),
+            Type::ImplTrait(generic_bounds) => InlineGroup::new(),
+            Type::Infer => InlineGroup::new(),
+            Type::RawPointer { is_mutable, type_ } => InlineGroup::new(),
             Type::BorrowedRef {
                 lifetime,
                 is_mutable,
                 type_,
-            } => Link::empty(),
+            } => InlineGroup::new(),
             Type::QualifiedPath {
                 name,
                 args,
                 self_type,
                 trait_,
-            } => Link::empty(),
+            } => InlineGroup::new(),
         }
     }
 

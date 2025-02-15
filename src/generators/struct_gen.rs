@@ -65,6 +65,16 @@ impl Generator for StructGenerator {
                                     return Err(anyhow::Error::msg(format!("inner can't be anything other than `StructField in index id: {}", field_id.0)));
                                 };
                                 syntax.push_str(&TypeGenerator::type_to_string(type_));
+
+                                fields_section.push(
+                                    TypeGenerator::type_to_link(
+                                        type_,
+                                        paths,
+                                        external_crates,
+                                        config,
+                                    ),
+                                    EmptyElement,
+                                );
                             } else {
                                 syntax.push_str("/* private field */");
                             }

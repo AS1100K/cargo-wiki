@@ -1,6 +1,42 @@
 use super::*;
 
 #[derive(Debug, Clone)]
+pub struct InlineGroup {
+    group: Document,
+}
+
+impl InlineGroup {
+    pub fn new() -> Self {
+        Self { group: Vec::new() }
+    }
+
+    pub fn push<E>(&mut self, element: E)
+    where
+        E: ToMarkdown + 'static,
+    {
+        self.group.push(Box::new(element));
+    }
+
+    pub fn push_c<E>(mut self, element: E) -> Self
+    where
+        E: ToMarkdown + 'static,
+    {
+        self.group.push(Box::new(element));
+        self
+    }
+}
+
+impl ToMarkdown for InlineGroup {
+    fn expects_new_line(&self) -> bool {
+        false
+    }
+
+    fn to_markdown(&self) -> String {
+        self.group.to_markdown()
+    }
+}
+
+#[derive(Debug, Clone)]
 pub struct Space(u8);
 
 impl Space {
