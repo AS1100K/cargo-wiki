@@ -1,6 +1,42 @@
 use super::*;
 
 #[derive(Debug, Clone)]
+pub struct InlineGroup {
+    group: Document,
+}
+
+impl InlineGroup {
+    pub fn new() -> Self {
+        Self { group: Vec::new() }
+    }
+
+    pub fn push<E>(&mut self, element: E)
+    where
+        E: ToMarkdown + 'static,
+    {
+        self.group.push(Box::new(element));
+    }
+
+    pub fn push_c<E>(mut self, element: E) -> Self
+    where
+        E: ToMarkdown + 'static,
+    {
+        self.group.push(Box::new(element));
+        self
+    }
+}
+
+impl ToMarkdown for InlineGroup {
+    fn expects_new_line(&self) -> bool {
+        false
+    }
+
+    fn to_markdown(&self) -> String {
+        self.group.to_markdown()
+    }
+}
+
+#[derive(Debug, Clone)]
 pub struct Space(u8);
 
 impl Space {
@@ -210,6 +246,29 @@ impl ToMarkdown for CodeSpan {
     }
 }
 
+#[derive(Debug, Clone)]
+pub struct Link(String, String);
+
+impl Link {
+    pub fn new(text: String, url: String) -> Self {
+        Self(text, url)
+    }
+
+    pub fn empty() -> Self {
+        Self(String::new(), String::new())
+    }
+}
+
+impl ToMarkdown for Link {
+    fn expects_new_line(&self) -> bool {
+        false
+    }
+
+    fn to_markdown(&self) -> String {
+        format!("[{}]({})", self.0, self.1)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -263,6 +322,14 @@ mod tests {
             .push_c(Italic::new(Text::new("Italic".into())));
 
         let expected = String::from("<b>Basic Text <u>Underline</u> <i>Italic</i></b>");
+
+        assert_eq!(actual.to_markdown(), expected);
+    }
+
+    #[test]
+    fn test_link() {
+        let actual = Link::new(String::from("Text"), String::from("https://example.com"));
+        let expected = String::from("[Text](https://example.com)");
 
         assert_eq!(actual.to_markdown(), expected);
     }

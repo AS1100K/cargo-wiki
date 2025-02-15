@@ -29,13 +29,14 @@ jobs:
       - name: Generate Docs
         run: |
           cp target/debug/cargo-wiki .
-          ./cargo-wiki -- --all-features --default-module-file-name "index" --default-link-file-extension ".html"
+          ./cargo-wiki -- --all-features --default-module-file-name "index" --default-link-file-extension ".html" -r "https://as1100k.github.io/cargo-wiki/"
 
       - name: Convert markdown files to HTML
         run: |
           sudo apt install pandoc
           mkdir html_docs
-          find target/wiki/cargo_wiki -name "*.md" -type f -exec sh -c 'mkdir -p "html_docs/$(dirname "${1#target/wiki/cargo_wiki/}")" && pandoc -s -f markdown -t html -o "html_docs/$(dirname "${1#target/wiki/cargo_wiki/}")/$(basename "${1%.*}").html" "$1"' sh {} \;
+          mkdir html_docs/cargo_wiki
+          find target/wiki/cargo_wiki -name "*.md" -type f -exec sh -c 'mkdir -p "html_docs/cargo_wiki/$(dirname "${1#target/wiki/cargo_wiki/}")" && pandoc -s -f markdown -t html -o "html_docs/cargo_wiki/$(dirname "${1#target/wiki/cargo_wiki/}")/$(basename "${1%.*}").html" "$1"' sh {} \;
 
       - name: Deploy docs preview to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4

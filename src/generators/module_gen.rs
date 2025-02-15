@@ -262,6 +262,7 @@ impl<'a> ModuleGenerator<'a> {
                         self.index,
                         self.paths,
                         self.external_crate,
+                        self.configuration,
                     )?;
 
                     module_documentations.content.push(ModuleContent {
@@ -290,6 +291,7 @@ impl<'a> ModuleGenerator<'a> {
                         self.index,
                         self.paths,
                         self.external_crate,
+                        self.configuration,
                     )?;
 
                     module_documentations.content.push(ModuleContent {

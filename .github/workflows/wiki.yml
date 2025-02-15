@@ -19,13 +19,13 @@ jobs:
       - name: Checkout wiki repository
         uses: actions/checkout@v4
         with:
-          repository: '${{ github.repository }}.wiki'
+          repository: "${{ github.repository }}.wiki"
           path: wiki
 
       - name: Install Rust Toolchain
         uses: rs-workspace/rust-toolchain@v0.2.0
         with:
-          toolchain: 'nightly'
+          toolchain: "nightly"
 
       - name: Configure Git
         run: |
@@ -42,7 +42,7 @@ jobs:
           cd cargo-wiki
           cargo build
           cp target/debug/cargo-wiki .
-          ./cargo-wiki -- --all-features -s single-file
+          ./cargo-wiki -- --all-features -s single-file -r "https://github.com/AS1100K/cargo-wiki/wiki/"
           rm -rf ../wiki/docs
           cp --recursive target/wiki ../wiki/docs
           cd ../wiki

@@ -1,8 +1,7 @@
+use crate::{blocks::Document, Configuration};
 use anyhow::Result;
 use rustdoc_types::{Id, Item, ItemSummary};
 use std::collections::HashMap;
-
-use crate::blocks::Document;
 
 pub mod enum_gen;
 pub mod fn_gen;
@@ -28,5 +27,6 @@ pub trait Generator {
         index: &Index,
         paths: &Paths,
         external_crates: &ExternalCrates,
+        config: &Configuration,
     ) -> Result<Document>;
 }

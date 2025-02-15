@@ -1,6 +1,6 @@
 pub struct UnitStruct;
 
-pub struct TupleStruct(i32, u64);
+pub struct TupleStruct(pub i32, pub u64, pub Basic);
 
 /// This is a very basic struct
 pub struct Basic {
