@@ -6,7 +6,10 @@ pub trait ToMarkdown {
     fn to_markdown(&self) -> String;
 }
 
-impl ToMarkdown for Vec<Box<dyn ToMarkdown>> {
+pub type Block = Box<dyn ToMarkdown>;
+pub type Document = Vec<Box<dyn ToMarkdown>>;
+
+impl ToMarkdown for Document {
     fn expects_new_line(&self) -> bool {
         false
     }
@@ -59,6 +62,40 @@ impl ToMarkdown for NLines {
         }
 
         lines
+    }
+}
+
+pub struct Title(u8, Block);
+
+impl Title {
+    pub fn new<E>(level: u8, element: E) -> Self
+    where
+        E: ToMarkdown + 'static,
+    {
+        if level > 6 || level == 0 {
+            panic!("The Level for title must be between 1 to 6 (inclusive).");
+        }
+
+        Self(level, Box::new(element))
+    }
+}
+
+impl ToMarkdown for Title {
+    fn expects_new_line(&self) -> bool {
+        true
+    }
+
+    fn to_markdown(&self) -> String {
+        let mut markdown = String::new();
+
+        for _ in 0..self.0 {
+            markdown.push('#');
+        }
+
+        markdown.push_str(" ");
+        markdown.push_str(&self.1.to_markdown());
+
+        markdown
     }
 }
 
@@ -229,6 +266,33 @@ impl DropDownState {
 mod tests {
     use super::*;
     use inline::*;
+
+    #[test]
+    fn test_title() {
+        let actual = Title::new(1, Text::from("H1"));
+        let expected = String::from("# H1");
+        assert_eq!(actual.to_markdown(), expected);
+
+        let actual = Title::new(2, Text::from("H2"));
+        let expected = String::from("## H2");
+        assert_eq!(actual.to_markdown(), expected);
+
+        let actual = Title::new(6, Text::from("H6"));
+        let expected = String::from("###### H6");
+        assert_eq!(actual.to_markdown(), expected);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_title_zero_level() {
+        Title::new(0, EmptyElement);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_wrong_seven_level() {
+        Title::new(7, EmptyElement);
+    }
 
     #[test]
     fn test_n_lines() {

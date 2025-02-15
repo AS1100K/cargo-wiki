@@ -176,6 +176,12 @@ impl From<String> for CodeSpan {
     }
 }
 
+impl From<&String> for CodeSpan {
+    fn from(value: &String) -> Self {
+        CodeSpan(value.to_owned())
+    }
+}
+
 impl From<&str> for CodeSpan {
     fn from(value: &str) -> Self {
         Self(String::from(value))
