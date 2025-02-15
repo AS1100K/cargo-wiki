@@ -243,18 +243,21 @@ class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> structure<span class="op">:</span> WikiStructure<span class="op">,</span></span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> default_link_file_extension<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> default_module_file_name<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> html_root_url<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <details close>
 <summary>
 Fields
 </summary>
 <ul>
-<li><p><code>package</code> : <code>String</code></p>
+<li><p><code>package</code> : <a
+href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html">String</a></p>
 <p>The package to document. See <a
 href="https://doc.rust-lang.org/cargo/commands/cargo-pkgid.html">cargo-pkgid</a>
 for the SPEC format.</p></li>
 <li><p><code>workspace</code> : <code>bool</code></p></li>
-<li><p><code>features</code> : <code>String</code></p>
+<li><p><code>features</code> : <a
+href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html">String</a></p>
 <p>Space or comma separated list of features to activate. Features of
 workspace members may be enabled with package-name/feature-name syntax.
 This flag may be specified multiple times, which enables all specified
@@ -266,15 +269,19 @@ features.</p></li>
 packages.</p></li>
 <li><p><code>document_private_items</code> : <code>bool</code></p></li>
 <li><p><code>no_deps</code> : <code>bool</code></p></li>
-<li><p><code>markdown_flavor</code> :
-<code>MarkdownFlavor</code></p></li>
-<li><p><code>structure</code> : <code>WikiStructure</code></p></li>
-<li><p><code>default_link_file_extension</code> :
-<code>String</code></p>
+<li><p><code>markdown_flavor</code> : <a
+href="https://as1100k.github.io/cargo-wiki/cargo_wiki/enum.MarkdownFlavor.html">MarkdownFlavor</a></p></li>
+<li><p><code>structure</code> : <a
+href="https://as1100k.github.io/cargo-wiki/cargo_wiki/enum.WikiStructure.html">WikiStructure</a></p></li>
+<li><p><code>default_link_file_extension</code> : <a
+href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html">String</a></p>
 <p>Sets the default file extension that will be used for all links. This
 doesn’t change file type.</p></li>
-<li><p><code>default_module_file_name</code> : <code>String</code></p>
+<li><p><code>default_module_file_name</code> : <a
+href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html">String</a></p>
 <p>Sets the default file name for module files</p></li>
+<li><p><code>html_root_url</code> : <a
+href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html">String</a></p></li>
 </ul>
 </details>
 <h2 id="implementations">Implementations</h2>

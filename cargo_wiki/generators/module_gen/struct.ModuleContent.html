@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>struct.ModuleGenerator</title>
+  <title>struct.ModuleContent</title>
   <style>
     html {
       color: #1a1a1a;
@@ -229,68 +229,81 @@
   </style>
 </head>
 <body>
-<h1 id="modulegenerator">ModuleGenerator</h1>
+<h1 id="modulecontent">ModuleContent</h1>
 <div class="sourceCode" id="cb1"><pre
-class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> ModuleGenerator<span class="op">&lt;</span><span class="ot">&#39;a</span><span class="op">&gt;</span> <span class="op">{</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> configuration<span class="op">:</span> <span class="op">&amp;</span><span class="ot">&#39;a</span> Configuration<span class="op">,</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> prefix_path<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> root_item<span class="op">:</span> <span class="op">&amp;</span><span class="ot">&#39;a</span> Item<span class="op">,</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> index<span class="op">:</span> <span class="op">&amp;</span><span class="ot">&#39;a</span> <span class="bu">Index</span><span class="op">,</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> paths<span class="op">:</span> <span class="op">&amp;</span><span class="ot">&#39;a</span> Paths<span class="op">,</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> external_crate<span class="op">:</span> <span class="op">&amp;</span><span class="ot">&#39;a</span> ExternalCrates<span class="op">,</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> ModuleContent<span class="op">&lt;</span><span class="ot">&#39;a</span><span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> file_path<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> kind<span class="op">:</span> ItemKind<span class="op">,</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> title<span class="op">:</span> <span class="op">&amp;</span><span class="ot">&#39;a</span> <span class="dt">str</span><span class="op">,</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> inner<span class="op">:</span> Document<span class="op">,</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <details close>
 <summary>
 Fields
 </summary>
 <ul>
-<li><code>configuration</code> : <code>&amp;'a Configuration</code></li>
-<li><code>prefix_path</code> : <code>String</code></li>
-<li><code>root_item</code> : <code>&amp;'a Item</code></li>
-<li><code>index</code> : <code>&amp;'a Index</code></li>
-<li><code>paths</code> : <code>&amp;'a Paths</code></li>
-<li><code>external_crate</code> :
-<code>&amp;'a ExternalCrates</code></li>
+<li><code>file_path</code> : <a
+href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html">String</a></li>
+<li><code>kind</code> : <a
+href="rustdoc_types/enum.ItemKind.html">ItemKind</a></li>
+<li><code>title</code> : <code>&amp;'a str</code></li>
+<li><code>inner</code> : <a
+href="https://as1100k.github.io/cargo-wiki/cargo_wiki/blocks/.html">Document</a></li>
 </ul>
 </details>
 <h2 id="implementations">Implementations</h2>
 <div class="sourceCode" id="cb2"><pre
-class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> new(configuration<span class="op">:</span> <span class="op">&amp;</span><span class="ot">&#39;a</span> Configuration<span class="op">,</span> prefix_path<span class="op">:</span> <span class="dt">String</span><span class="op">,</span> root_item<span class="op">:</span> <span class="op">&amp;</span><span class="ot">&#39;a</span> Item<span class="op">,</span> index<span class="op">:</span> <span class="op">&amp;</span><span class="ot">&#39;a</span> <span class="bu">Index</span><span class="op">,</span> paths<span class="op">:</span> <span class="op">&amp;</span><span class="ot">&#39;a</span> Paths<span class="op">,</span> external_crate<span class="op">:</span> <span class="op">&amp;</span><span class="ot">&#39;a</span> ExternalCrates) <span class="op">-&gt;</span> <span class="dt">Self</span><span class="op">;</span></span></code></pre></div>
-<div class="sourceCode" id="cb3"><pre
-class="sourceCode rust"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> auto(<span class="kw">self</span><span class="op">:</span> <span class="dt">Self</span>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>ModuleDocumentation<span class="op">&lt;</span><span class="ot">&#39;a</span><span class="op">&gt;&gt;;</span></span></code></pre></div>
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> save_to_file(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>()<span class="op">&gt;;</span></span></code></pre></div>
 <h2 id="trait-implementations">Trait Implementations</h2>
-<p><code>impl&lt;T&gt; Borrow&lt;T&gt; for ModuleGenerator&lt;'a&gt; where     T: ?Sized</code></p>
+<p><code>impl&lt;T&gt; Borrow&lt;T&gt; for ModuleContent&lt;'a&gt; where     T: ?Sized</code></p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> borrow(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span>) <span class="op">-&gt;</span> <span class="op">&amp;</span>T<span class="op">;</span></span></code></pre></div>
+<p><code>impl&lt;T&gt; BorrowMut&lt;T&gt; for ModuleContent&lt;'a&gt; where     T: ?Sized</code></p>
 <div class="sourceCode" id="cb4"><pre
-class="sourceCode rust"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> borrow(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span>) <span class="op">-&gt;</span> <span class="op">&amp;</span>T<span class="op">;</span></span></code></pre></div>
-<p><code>impl&lt;T&gt; BorrowMut&lt;T&gt; for ModuleGenerator&lt;'a&gt; where     T: ?Sized</code></p>
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> borrow_mut(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="dt">Self</span>) <span class="op">-&gt;</span> <span class="op">&amp;</span><span class="kw">mut</span> T<span class="op">;</span></span></code></pre></div>
+<p><code>impl&lt;T&gt; CloneToUninit for ModuleContent&lt;'a&gt; where     T: Clone</code></p>
 <div class="sourceCode" id="cb5"><pre
-class="sourceCode rust"><code class="sourceCode rust"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> borrow_mut(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="dt">Self</span>) <span class="op">-&gt;</span> <span class="op">&amp;</span><span class="kw">mut</span> T<span class="op">;</span></span></code></pre></div>
-<p><code>impl&lt;T, U&gt; Into&lt;U&gt; for ModuleGenerator&lt;'a&gt; where     U: From&lt;T&gt;</code></p>
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">unsafe</span> <span class="kw">fn</span> clone_to_uninit(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span><span class="op">,</span> dst<span class="op">:</span> <span class="op">*</span><span class="kw">mut</span> <span class="dt">u8</span>)<span class="op">;</span></span></code></pre></div>
+<p><code>impl&lt;T, U&gt; Into&lt;U&gt; for ModuleContent&lt;'a&gt; where     U: From&lt;T&gt;</code></p>
 <div class="sourceCode" id="cb6"><pre
 class="sourceCode rust"><code class="sourceCode rust"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">/// Calls `U::from(self)`.</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">/// </span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">/// That is, this conversion is whatever the implementation of</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">/// &lt;code&gt;[From]&amp;lt;T&amp;gt; for U&lt;/code&gt; chooses to do.</span></span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> into(<span class="kw">self</span><span class="op">:</span> <span class="dt">Self</span>) <span class="op">-&gt;</span> U<span class="op">;</span></span></code></pre></div>
-<p><code>impl&lt;T&gt; From&lt;T&gt; for ModuleGenerator&lt;'a&gt;</code></p>
+<p><code>impl&lt;T&gt; From&lt;T&gt; for ModuleContent&lt;'a&gt;</code></p>
 <div class="sourceCode" id="cb7"><pre
 class="sourceCode rust"><code class="sourceCode rust"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">/// Returns the argument unchanged.</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> from(t<span class="op">:</span> T) <span class="op">-&gt;</span> T<span class="op">;</span></span></code></pre></div>
-<p><code>impl&lt;T, U&gt; TryInto&lt;U&gt; for ModuleGenerator&lt;'a&gt; where     U: TryFrom&lt;T&gt;</code></p>
+<p><code>impl&lt;T, U&gt; TryInto&lt;U&gt; for ModuleContent&lt;'a&gt; where     U: TryFrom&lt;T&gt;</code></p>
 <div class="sourceCode" id="cb8"><pre
 class="sourceCode rust"><code class="sourceCode rust"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> try_into(<span class="kw">self</span><span class="op">:</span> <span class="dt">Self</span>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>U<span class="op">,</span> <span class="op">&gt;;</span></span></code></pre></div>
-<p><code>impl&lt;T, U&gt; TryFrom&lt;U&gt; for ModuleGenerator&lt;'a&gt; where     U: Into&lt;T&gt;</code></p>
+<p><code>impl&lt;T, U&gt; TryFrom&lt;U&gt; for ModuleContent&lt;'a&gt; where     U: Into&lt;T&gt;</code></p>
 <div class="sourceCode" id="cb9"><pre
 class="sourceCode rust"><code class="sourceCode rust"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> try_from(value<span class="op">:</span> U) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>T<span class="op">,</span> <span class="op">&gt;;</span></span></code></pre></div>
-<p><code>impl&lt;T&gt; Any for ModuleGenerator&lt;'a&gt; where     T: 'static + ?Sized</code></p>
+<p><code>impl&lt;T&gt; Any for ModuleContent&lt;'a&gt; where     T: 'static + ?Sized</code></p>
 <div class="sourceCode" id="cb10"><pre
 class="sourceCode rust"><code class="sourceCode rust"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> type_id(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span>) <span class="op">-&gt;</span> TypeId<span class="op">;</span></span></code></pre></div>
+<p><code>impl&lt;T&gt; ToOwned for ModuleContent&lt;'a&gt; where     T: Clone</code></p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> to_owned(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span>) <span class="op">-&gt;</span> T<span class="op">;</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> clone_into(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span><span class="op">,</span> target<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> T)<span class="op">;</span></span></code></pre></div>
+<p><code>impl&lt;T&gt; DynClone for ModuleContent&lt;'a&gt; where     T: Clone</code></p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> __clone_box(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span><span class="op">,</span> _<span class="op">:</span> Private) <span class="op">-&gt;</span> <span class="op">*</span><span class="kw">mut</span> ()<span class="op">;</span></span></code></pre></div>
+<p><code>impl&lt;'a&gt; Debug for ModuleContent&lt;'a&gt;</code></p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> fmt(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span><span class="op">,</span> f<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> Formatter<span class="op">&lt;</span><span class="ot">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">;</span></span></code></pre></div>
+<p><code>impl&lt;'a&gt; Clone for ModuleContent&lt;'a&gt;</code></p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> clone(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span>) <span class="op">-&gt;</span> ModuleContent<span class="op">&lt;</span><span class="ot">&#39;a</span><span class="op">&gt;;</span></span></code></pre></div>
 <h2 id="auto-trait-implementations">Auto Trait Implementations</h2>
-<p><code>impl&lt;'a&gt; Send for ModuleGenerator&lt;'a&gt;</code></p>
-<p><code>impl&lt;'a&gt; Sync for ModuleGenerator&lt;'a&gt;</code></p>
-<p><code>impl&lt;'a&gt; Freeze for ModuleGenerator&lt;'a&gt;</code></p>
-<p><code>impl&lt;'a&gt; Unpin for ModuleGenerator&lt;'a&gt;</code></p>
-<p><code>impl&lt;'a&gt; UnwindSafe for ModuleGenerator&lt;'a&gt;</code></p>
-<p><code>impl&lt;'a&gt; RefUnwindSafe for ModuleGenerator&lt;'a&gt;</code></p>
+<p><code>impl&lt;'a&gt; !Send for ModuleContent&lt;'a&gt;</code></p>
+<p><code>impl&lt;'a&gt; !Sync for ModuleContent&lt;'a&gt;</code></p>
+<p><code>impl&lt;'a&gt; Freeze for ModuleContent&lt;'a&gt;</code></p>
+<p><code>impl&lt;'a&gt; Unpin for ModuleContent&lt;'a&gt;</code></p>
+<p><code>impl&lt;'a&gt; !UnwindSafe for ModuleContent&lt;'a&gt;</code></p>
+<p><code>impl&lt;'a&gt; !RefUnwindSafe for ModuleContent&lt;'a&gt;</code></p>
 </body>
 </html>

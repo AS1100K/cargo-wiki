@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>struct.TupleStruct</title>
+  <title>struct.Basic</title>
   <style>
     html {
       color: #1a1a1a;
@@ -229,48 +229,58 @@
   </style>
 </head>
 <body>
-<h1 id="tuplestruct">TupleStruct</h1>
+<h1 id="basic">Basic</h1>
 <div class="sourceCode" id="cb1"><pre
-class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> TupleStruct(<span class="co">/* private field */</span><span class="op">,</span> <span class="co">/* private field */</span>)</span></code></pre></div>
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> Basic <span class="op">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> type_<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">type</span>: String,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>This is a very basic struct</p>
 <details close>
 <summary>
 Fields
 </summary>
+<ul>
+<li><code>type_</code> : <a
+href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html">String</a></li>
+<li><code>type</code> : <a
+href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html">String</a></li>
+</ul>
 </details>
 <h2 id="implementations">Implementations</h2>
 <h2 id="trait-implementations">Trait Implementations</h2>
-<p><code>impl&lt;T&gt; Borrow&lt;T&gt; for TupleStruct where     T: ?Sized</code></p>
+<p><code>impl&lt;T&gt; Borrow&lt;T&gt; for Basic where     T: ?Sized</code></p>
 <div class="sourceCode" id="cb2"><pre
 class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> borrow(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span>) <span class="op">-&gt;</span> <span class="op">&amp;</span>T<span class="op">;</span></span></code></pre></div>
-<p><code>impl&lt;T&gt; BorrowMut&lt;T&gt; for TupleStruct where     T: ?Sized</code></p>
+<p><code>impl&lt;T&gt; BorrowMut&lt;T&gt; for Basic where     T: ?Sized</code></p>
 <div class="sourceCode" id="cb3"><pre
 class="sourceCode rust"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> borrow_mut(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="dt">Self</span>) <span class="op">-&gt;</span> <span class="op">&amp;</span><span class="kw">mut</span> T<span class="op">;</span></span></code></pre></div>
-<p><code>impl&lt;T, U&gt; Into&lt;U&gt; for TupleStruct where     U: From&lt;T&gt;</code></p>
+<p><code>impl&lt;T, U&gt; Into&lt;U&gt; for Basic where     U: From&lt;T&gt;</code></p>
 <div class="sourceCode" id="cb4"><pre
 class="sourceCode rust"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">/// Calls `U::from(self)`.</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">/// </span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">/// That is, this conversion is whatever the implementation of</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">/// &lt;code&gt;[From]&amp;lt;T&amp;gt; for U&lt;/code&gt; chooses to do.</span></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> into(<span class="kw">self</span><span class="op">:</span> <span class="dt">Self</span>) <span class="op">-&gt;</span> U<span class="op">;</span></span></code></pre></div>
-<p><code>impl&lt;T&gt; From&lt;T&gt; for TupleStruct</code></p>
+<p><code>impl&lt;T&gt; From&lt;T&gt; for Basic</code></p>
 <div class="sourceCode" id="cb5"><pre
 class="sourceCode rust"><code class="sourceCode rust"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">/// Returns the argument unchanged.</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> from(t<span class="op">:</span> T) <span class="op">-&gt;</span> T<span class="op">;</span></span></code></pre></div>
-<p><code>impl&lt;T, U&gt; TryInto&lt;U&gt; for TupleStruct where     U: TryFrom&lt;T&gt;</code></p>
+<p><code>impl&lt;T, U&gt; TryInto&lt;U&gt; for Basic where     U: TryFrom&lt;T&gt;</code></p>
 <div class="sourceCode" id="cb6"><pre
 class="sourceCode rust"><code class="sourceCode rust"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> try_into(<span class="kw">self</span><span class="op">:</span> <span class="dt">Self</span>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>U<span class="op">,</span> <span class="op">&gt;;</span></span></code></pre></div>
-<p><code>impl&lt;T, U&gt; TryFrom&lt;U&gt; for TupleStruct where     U: Into&lt;T&gt;</code></p>
+<p><code>impl&lt;T, U&gt; TryFrom&lt;U&gt; for Basic where     U: Into&lt;T&gt;</code></p>
 <div class="sourceCode" id="cb7"><pre
 class="sourceCode rust"><code class="sourceCode rust"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> try_from(value<span class="op">:</span> U) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>T<span class="op">,</span> <span class="op">&gt;;</span></span></code></pre></div>
-<p><code>impl&lt;T&gt; Any for TupleStruct where     T: 'static + ?Sized</code></p>
+<p><code>impl&lt;T&gt; Any for Basic where     T: 'static + ?Sized</code></p>
 <div class="sourceCode" id="cb8"><pre
 class="sourceCode rust"><code class="sourceCode rust"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> type_id(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span>) <span class="op">-&gt;</span> TypeId<span class="op">;</span></span></code></pre></div>
 <h2 id="auto-trait-implementations">Auto Trait Implementations</h2>
-<p><code>impl Send for TupleStruct</code></p>
-<p><code>impl Sync for TupleStruct</code></p>
-<p><code>impl Freeze for TupleStruct</code></p>
-<p><code>impl Unpin for TupleStruct</code></p>
-<p><code>impl UnwindSafe for TupleStruct</code></p>
-<p><code>impl RefUnwindSafe for TupleStruct</code></p>
+<p><code>impl Send for Basic</code></p>
+<p><code>impl Sync for Basic</code></p>
+<p><code>impl Freeze for Basic</code></p>
+<p><code>impl Unpin for Basic</code></p>
+<p><code>impl UnwindSafe for Basic</code></p>
+<p><code>impl RefUnwindSafe for Basic</code></p>
 </body>
 </html>
