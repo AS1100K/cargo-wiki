@@ -110,9 +110,11 @@ impl Generator for StructGenerator {
                                     GroupBlock::new()
                                         .push_c(CodeSpan::from(field_name))
                                         .push_c(Text::from(" : "))
-                                        .push_c(CodeSpan::from(TypeGenerator::type_to_string(
+                                        .push_c(TypeGenerator::type_to_link(
                                             type_,
-                                        ))),
+                                            paths,
+                                            external_crates,
+                                        )),
                                     Text::from(docs),
                                 );
                             } else {

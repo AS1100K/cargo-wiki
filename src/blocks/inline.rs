@@ -217,6 +217,10 @@ impl Link {
     pub fn new(text: String, url: String) -> Self {
         Self(text, url)
     }
+
+    pub fn empty() -> Self {
+        Self(String::new(), String::new())
+    }
 }
 
 impl ToMarkdown for Link {
