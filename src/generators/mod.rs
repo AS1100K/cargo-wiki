@@ -1,7 +1,8 @@
-use crate::generators::module_gen::InnerModuleContent;
 use anyhow::Result;
 use rustdoc_types::{Id, Item, ItemSummary};
 use std::collections::HashMap;
+
+use crate::blocks::Document;
 
 pub mod enum_gen;
 pub mod fn_gen;
@@ -27,5 +28,5 @@ pub trait Generator {
         index: &Index,
         paths: &Paths,
         external_crates: &ExternalCrates,
-    ) -> Result<Vec<InnerModuleContent>>;
+    ) -> Result<Document>;
 }

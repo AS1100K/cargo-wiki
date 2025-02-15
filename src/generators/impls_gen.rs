@@ -1,9 +1,11 @@
 use rustdoc_types::{Id, ItemEnum};
 
-use super::{
-    fn_gen::FunctionGenerator, generic_gen::GenericGenerator, module_gen::InnerModuleContent,
-    type_gen::TypeGenerator,
+use crate::blocks::{
+    inline::{CodeSpan, Text},
+    Document, NLines, RawBlock, Title,
 };
+
+use super::{fn_gen::FunctionGenerator, generic_gen::GenericGenerator, type_gen::TypeGenerator};
 
 pub struct ImplsGenerator;
 
@@ -11,21 +13,17 @@ impl ImplsGenerator {
     pub fn generate_impls(
         impls: &Vec<Id>,
         index: &super::Index,
-    ) -> anyhow::Result<[InnerModuleContent; 3]> {
-        let mut implementations = InnerModuleContent {
-            title: "Implementations".to_string(),
-            content: String::new(),
-        };
+    ) -> anyhow::Result<[Box<Document>; 3]> {
+        let mut implementations: Document =
+            vec![Box::new(Title::new(2, Text::from("Implementations")))];
 
-        let mut trait_implementations = InnerModuleContent {
-            title: "Trait Implementations".to_string(),
-            content: String::new(),
-        };
+        let mut trait_implementations: Document =
+            vec![Box::new(Title::new(2, Text::from("Trait Implementations")))];
 
-        let mut auto_trait_implementations = InnerModuleContent {
-            title: "Auto Trait Implementations".to_string(),
-            content: String::new(),
-        };
+        let mut auto_trait_implementations: Document = vec![Box::new(Title::new(
+            2,
+            Text::from("Auto Trait Implementations"),
+        ))];
 
         for id in impls {
             if let Some(item) = index.get(id) {
@@ -49,23 +47,23 @@ impl ImplsGenerator {
                     };
 
                     if let Some(trait_) = &impl_info.trait_ {
-                        current_impl.content.push_str("`impl");
-                        current_impl.content.push_str(&params);
-                        current_impl.content.push_str(" ");
+                        let mut content = String::from("impl");
+
+                        content.push_str(&params);
+                        content.push_str(" ");
 
                         if impl_info.is_negative {
-                            current_impl.content.push_str("!");
+                            content.push_str("!");
                         }
 
-                        current_impl
-                            .content
-                            .push_str(&TypeGenerator::path_to_string(trait_));
-                        current_impl.content.push_str(" for ");
-                        current_impl
-                            .content
-                            .push_str(&&TypeGenerator::type_to_string(&impl_info.for_));
-                        current_impl.content.push_str(&where_predicate);
-                        current_impl.content.push_str("`\n\n");
+                        content.push_str(&TypeGenerator::path_to_string(trait_));
+                        content.push_str(" for ");
+                        content.push_str(&&TypeGenerator::type_to_string(&impl_info.for_));
+                        content.push_str(&where_predicate);
+
+                        current_impl.push(Box::new(NLines::new(2)));
+                        current_impl.push(Box::new(CodeSpan::from(content)));
+                        current_impl.push(Box::new(NLines::new(2)));
                     }
 
                     // Generate syntax for functions
@@ -92,16 +90,17 @@ impl ImplsGenerator {
                                     None => String::new(),
                                 };
 
-                                current_impl.content.push_str("```rust\n");
-                                current_impl.content.push_str(&docs);
+                                let mut content = String::from("```rust\n");
+                                content.push_str(&docs);
 
-                                current_impl
-                                    .content
-                                    .push_str(&FunctionGenerator::generate_syntax(
-                                        function,
-                                        function_name,
-                                    )?);
-                                current_impl.content.push_str("\n```\n\n");
+                                content.push_str(&FunctionGenerator::generate_syntax(
+                                    function,
+                                    function_name,
+                                )?);
+
+                                content.push_str("\n```");
+
+                                current_impl.push(Box::new(RawBlock::from(content)));
                             }
                         }
                     }
@@ -110,9 +109,9 @@ impl ImplsGenerator {
         }
 
         Ok([
-            implementations,
-            trait_implementations,
-            auto_trait_implementations,
+            Box::new(implementations),
+            Box::new(trait_implementations),
+            Box::new(auto_trait_implementations),
         ])
     }
 }

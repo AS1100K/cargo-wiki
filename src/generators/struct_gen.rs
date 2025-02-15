@@ -1,6 +1,7 @@
 use super::impls_gen::ImplsGenerator;
+use crate::blocks::inline::{CodeSpan, Text};
+use crate::blocks::{Document, DropDown, EmptyElement, GroupBlock, ListBlock, RawBlock};
 use crate::generators::generic_gen::GenericGenerator;
-use crate::generators::module_gen::InnerModuleContent;
 use crate::generators::type_gen::TypeGenerator;
 use crate::generators::visibility_gen::VisibilityGenerator;
 use crate::generators::{ExternalCrates, Generator, Index, Paths};
@@ -17,18 +18,18 @@ impl Generator for StructGenerator {
         index: &Index,
         paths: &Paths,
         external_crates: &ExternalCrates,
-    ) -> Result<Vec<InnerModuleContent>> {
+    ) -> Result<Document> {
         if let ItemEnum::Struct(rustdoc_types::Struct {
             kind,
             generics,
             impls,
         }) = &item.inner
         {
-            let mut docs = match &item.docs {
+            let docs = match &item.docs {
                 Some(docs) => docs.clone(),
                 None => String::new(),
             };
-            let mut fields_section = String::new();
+            let mut fields_section = ListBlock::new_unordered_list();
             let mut syntax = String::from("```rust\n");
             syntax.push_str(&VisibilityGenerator::generate_visibility(&item.visibility));
             syntax.push_str("struct ");
@@ -104,16 +105,26 @@ impl Generator for StructGenerator {
                             syntax.push_str(&TypeGenerator::type_to_string(type_));
                             syntax.push_str(",\n");
 
-                            fields_section.push_str("- `");
-                            fields_section.push_str(field_name);
-                            fields_section.push_str("` : `");
-                            fields_section.push_str(&TypeGenerator::type_to_string(type_));
-                            fields_section.push_str("`\n");
-
                             if let Some(docs) = &field_item.docs {
-                                fields_section.push_str("\n\t");
-                                fields_section.push_str(docs);
-                                fields_section.push_str("\n");
+                                fields_section.push(
+                                    GroupBlock::new()
+                                        .push_c(CodeSpan::from(field_name))
+                                        .push_c(Text::from(" : "))
+                                        .push_c(CodeSpan::from(TypeGenerator::type_to_string(
+                                            type_,
+                                        ))),
+                                    Text::from(docs),
+                                );
+                            } else {
+                                fields_section.push(
+                                    GroupBlock::new()
+                                        .push_c(CodeSpan::from(field_name))
+                                        .push_c(Text::from(" : "))
+                                        .push_c(CodeSpan::from(TypeGenerator::type_to_string(
+                                            type_,
+                                        ))),
+                                    EmptyElement,
+                                );
                             }
                         }
 
@@ -129,18 +140,9 @@ impl Generator for StructGenerator {
                 let [impl1, impl2, impl3] = ImplsGenerator::generate_impls(impls, index)?;
 
                 return Ok(vec![
-                    InnerModuleContent {
-                        title: String::new(),
-                        content: syntax,
-                    },
-                    InnerModuleContent {
-                        title: String::new(),
-                        content: docs,
-                    },
-                    InnerModuleContent {
-                        title: String::from("Fields"),
-                        content: fields_section,
-                    },
+                    Box::new(RawBlock::from(syntax)),
+                    Box::new(RawBlock::from(docs)),
+                    Box::new(DropDown::new_closed(Text::from("Fields"), fields_section)),
                     impl1,
                     impl2,
                     impl3,

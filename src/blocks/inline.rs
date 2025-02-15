@@ -1,5 +1,6 @@
 use super::*;
 
+#[derive(Debug, Clone)]
 pub struct Space(u8);
 
 impl Space {
@@ -24,6 +25,7 @@ impl ToMarkdown for Space {
     }
 }
 
+#[derive(Debug, Clone)]
 pub struct Text(String);
 
 impl Text {
@@ -35,6 +37,12 @@ impl Text {
 impl From<String> for Text {
     fn from(value: String) -> Self {
         Self(value)
+    }
+}
+
+impl From<&String> for Text {
+    fn from(value: &String) -> Self {
+        Self(value.to_owned())
     }
 }
 
@@ -54,6 +62,7 @@ impl ToMarkdown for Text {
     }
 }
 
+#[derive(Debug, Clone)]
 pub struct Bold(Vec<Box<dyn ToMarkdown>>);
 
 impl Bold {
@@ -90,6 +99,7 @@ impl ToMarkdown for Bold {
     }
 }
 
+#[derive(Debug, Clone)]
 pub struct Italic(Vec<Box<dyn ToMarkdown>>);
 
 impl Italic {
@@ -126,6 +136,7 @@ impl ToMarkdown for Italic {
     }
 }
 
+#[derive(Debug, Clone)]
 pub struct Underline(Vec<Box<dyn ToMarkdown>>);
 
 impl Underline {
@@ -162,6 +173,7 @@ impl ToMarkdown for Underline {
     }
 }
 
+#[derive(Debug, Clone)]
 pub struct CodeSpan(String);
 
 impl CodeSpan {

@@ -1,10 +1,13 @@
+use dyn_clone::DynClone;
+
 pub mod inline;
 
-pub trait ToMarkdown {
+pub trait ToMarkdown: std::fmt::Debug + DynClone {
     fn expects_new_line(&self) -> bool;
 
     fn to_markdown(&self) -> String;
 }
+dyn_clone::clone_trait_object!(ToMarkdown);
 
 pub type Block = Box<dyn ToMarkdown>;
 pub type Document = Vec<Box<dyn ToMarkdown>>;
@@ -29,6 +32,74 @@ impl ToMarkdown for Document {
     }
 }
 
+#[derive(Debug, Clone)]
+pub struct GroupBlock {
+    group: Document,
+}
+
+impl GroupBlock {
+    pub fn new() -> Self {
+        Self { group: Vec::new() }
+    }
+
+    pub fn push<E>(&mut self, element: E)
+    where
+        E: ToMarkdown + 'static,
+    {
+        self.group.push(Box::new(element));
+    }
+
+    pub fn push_c<E>(mut self, element: E) -> Self
+    where
+        E: ToMarkdown + 'static,
+    {
+        self.group.push(Box::new(element));
+        self
+    }
+}
+
+impl ToMarkdown for GroupBlock {
+    fn expects_new_line(&self) -> bool {
+        true
+    }
+
+    fn to_markdown(&self) -> String {
+        self.group.to_markdown()
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct RawBlock(String);
+
+impl From<String> for RawBlock {
+    fn from(value: String) -> Self {
+        RawBlock(value)
+    }
+}
+
+impl From<&String> for RawBlock {
+    fn from(value: &String) -> Self {
+        RawBlock(value.to_owned())
+    }
+}
+
+impl From<&str> for RawBlock {
+    fn from(value: &str) -> Self {
+        RawBlock(String::from(value))
+    }
+}
+
+impl ToMarkdown for RawBlock {
+    fn expects_new_line(&self) -> bool {
+        true
+    }
+
+    fn to_markdown(&self) -> String {
+        self.0.to_owned()
+    }
+}
+
+#[derive(Debug, Clone)]
 pub struct EmptyElement;
 
 impl ToMarkdown for EmptyElement {
@@ -41,6 +112,7 @@ impl ToMarkdown for EmptyElement {
     }
 }
 
+#[derive(Debug, Clone)]
 pub struct NLines(u8);
 
 impl NLines {
@@ -65,7 +137,8 @@ impl ToMarkdown for NLines {
     }
 }
 
-pub struct Title(u8, Block);
+#[derive(Debug, Clone)]
+pub struct Title(u8, Box<dyn ToMarkdown>);
 
 impl Title {
     pub fn new<E>(level: u8, element: E) -> Self
@@ -99,6 +172,7 @@ impl ToMarkdown for Title {
     }
 }
 
+#[derive(Debug, Clone)]
 pub struct ListBlock {
     list_type: ListType,
     blocks: Vec<(Box<dyn ToMarkdown>, Box<dyn ToMarkdown>)>,
@@ -175,11 +249,13 @@ impl ToMarkdown for ListBlock {
     }
 }
 
+#[derive(Debug, Clone)]
 enum ListType {
     Ordered,
     Unordered,
 }
 
+#[derive(Debug, Clone)]
 pub struct DropDown {
     state: DropDownState,
     summary: Box<dyn ToMarkdown>,
@@ -248,6 +324,7 @@ impl ToMarkdown for DropDown {
     }
 }
 
+#[derive(Debug, Clone)]
 enum DropDownState {
     Opened,
     Closed,

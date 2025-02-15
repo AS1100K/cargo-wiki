@@ -1,4 +1,4 @@
-use anyhow::anyhow;
+use crate::blocks;
 use rustdoc_types::{ItemEnum, VariantKind};
 
 use super::{
@@ -14,7 +14,7 @@ impl Generator for EnumGenerator {
         index: &Index,
         paths: &Paths,
         external_crates: &ExternalCrates,
-    ) -> Result<Vec<InnerModuleContent>> {
+    ) -> Result<Document> {
         let ItemEnum::Enum(rustdoc_types::Enum {
             generics,
             has_stripped_variants,
@@ -31,7 +31,7 @@ impl Generator for EnumGenerator {
             Some(docs) => docs.clone(),
             None => String::new(),
         };
-        let mut variants_section = String::new();
+        let mut variants_section = blocks::ListBlock::new_unordered_list();
         let mut syntax = String::from("```rust\n");
         syntax.push_str(&VisibilityGenerator::generate_visibility(&item.visibility));
         syntax.push_str("enum ");
@@ -74,14 +74,16 @@ impl Generator for EnumGenerator {
             syntax.push_str("\t");
             syntax.push_str(variant_name);
 
-            variants_section.push_str("- `");
-            variants_section.push_str(variant_name);
-            variants_section.push_str("`");
-
             if let Some(variant_doc) = &variant.docs {
-                variants_section.push_str("\n\n\t");
-                variants_section.push_str(variant_doc);
-                variants_section.push_str("\n");
+                variants_section.push(
+                    blocks::inline::CodeSpan::from(variant_name),
+                    blocks::inline::Text::from(variant_doc),
+                );
+            } else {
+                variants_section.push(
+                    blocks::inline::CodeSpan::from(variant_name),
+                    blocks::EmptyElement,
+                );
             }
 
             match &variant_item.kind {
@@ -139,18 +141,12 @@ impl Generator for EnumGenerator {
         let [impl1, impl2, impl3] = ImplsGenerator::generate_impls(impls, index)?;
 
         Ok(vec![
-            InnerModuleContent {
-                title: String::new(),
-                content: syntax,
-            },
-            InnerModuleContent {
-                title: String::new(),
-                content: docs,
-            },
-            InnerModuleContent {
-                title: String::from("Variants"),
-                content: variants_section,
-            },
+            Box::new(blocks::RawBlock::from(syntax)),
+            Box::new(blocks::RawBlock::from(docs)),
+            Box::new(blocks::DropDown::new_closed(
+                blocks::inline::Text::from("Variants"),
+                variants_section,
+            )),
             impl1,
             impl2,
             impl3,

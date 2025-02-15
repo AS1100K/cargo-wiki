@@ -1,3 +1,6 @@
+use std::fmt::Debug;
+
+use crate::blocks::Document;
 use crate::generators::struct_gen::StructGenerator;
 use crate::generators::{ExternalCrates, Generator, Index, Paths};
 use crate::Configuration;
@@ -118,6 +121,7 @@ impl<'a> ModuleField<'a> {
 }
 
 #[derive(Default, Debug, Clone)]
+// #[derive(Default)]
 pub struct ModuleDocumentation<'a> {
     pub file_path: String,
     pub title: &'a str,
@@ -131,13 +135,7 @@ pub struct ModuleContent<'a> {
     pub file_path: String,
     pub kind: ItemKind,
     pub title: &'a str,
-    pub inner: Vec<InnerModuleContent>,
-}
-
-#[derive(Debug, Clone)]
-pub struct InnerModuleContent {
-    pub title: String,
-    pub content: String,
+    pub inner: Document,
 }
 
 pub struct ModuleGenerator<'a> {

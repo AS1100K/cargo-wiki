@@ -1,6 +1,4 @@
-use crate::generators::module_gen::{
-    InnerModuleContent, ModuleContent, ModuleDocumentation, ModuleGenerator,
-};
+use crate::generators::module_gen::{ModuleContent, ModuleDocumentation, ModuleGenerator};
 use crate::{gen_path, save_file, Configuration, WikiStructure, WIKI_OUTPUT_PATH};
 use anyhow::Result;
 use rustdoc_types::Crate;
@@ -67,7 +65,7 @@ impl<'a> ModuleDocumentation<'a> {
 
                     for inner in &content.inner {
                         file_content.push_str("\n\n");
-                        file_content.push_str(&inner.to_string());
+                        file_content.push_str(&inner.to_markdown());
                     }
                 }
 
@@ -91,29 +89,10 @@ impl<'a> ModuleContent<'a> {
         let mut file_content = format!("# {}\n\n", self.title);
 
         for inner in &self.inner {
-            file_content.push_str(&inner.to_string());
+            file_content.push_str(&inner.to_markdown());
             file_content.push_str("\n\n");
         }
 
         save_file(&self.file_path, &file_content)
-    }
-}
-
-impl InnerModuleContent {
-    pub fn to_string(&self) -> String {
-        let mut module_content = String::new();
-
-        if self.content.is_empty() {
-            return module_content;
-        }
-
-        if !self.title.is_empty() {
-            module_content.push_str("## ");
-            module_content.push_str(&self.title);
-            module_content.push_str("\n\n");
-        }
-
-        module_content.push_str(&self.content);
-        module_content
     }
 }
