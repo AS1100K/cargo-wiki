@@ -3,6 +3,7 @@ name: docs
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -11,6 +12,19 @@ jobs:
   docs:
     runs-on: ubuntu-latest
     steps:
+      - name: Generate GitHub App token
+        uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{vars.CHORE_APP_ID}}
+          private-key: ${{secrets.CHORE_ACCOUNT_TOKEN}}
+
+      - name: Get GitHub App User ID
+        id: get-user-id
+        run: echo "user-id=$(gh api "/users/${{ steps.app-token.outputs.app-slug }}[bot]" --jq .id)" >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+
       - uses: actions/checkout@v3
 
       - name: Setup Rust
@@ -29,7 +43,7 @@ jobs:
       - name: Generate Docs
         run: |
           cp target/debug/cargo-wiki .
-          ./cargo-wiki -- --all-features --default-module-file-name "index" --default-link-file-extension ".html" -r "https://as1100k.github.io/cargo-wiki/"
+          ./cargo-wiki -- --all-features --default-module-file-name "index" --default-link-file-extension ".html"
 
       - name: Convert markdown files to HTML
         run: |
@@ -37,9 +51,13 @@ jobs:
           mkdir html_docs
           mkdir html_docs/cargo_wiki
           find target/wiki/cargo_wiki -name "*.md" -type f -exec sh -c 'mkdir -p "html_docs/cargo_wiki/$(dirname "${1#target/wiki/cargo_wiki/}")" && pandoc -s -f markdown -t html -o "html_docs/cargo_wiki/$(dirname "${1#target/wiki/cargo_wiki/}")/$(basename "${1%.*}").html" "$1"' sh {} \;
+          echo '<meta http-equiv="refresh" content="0; url=cargo_wiki/index.html">' > html_docs/index.html
 
       - name: Deploy docs preview to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ steps.app-token.outputs.token }}
           publish_dir: ./html_docs
+          cname: cargo-wiki.adityais.dev
+          user_name: '${{ steps.app-token.outputs.app-slug }}[bot]'
+          user_email: '${{ steps.get-user-id.outputs.user-id }}+${{ steps.app-token.outputs.app-slug }}[bot]@users.noreply.github.com'
