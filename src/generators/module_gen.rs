@@ -3,6 +3,7 @@ use std::fmt::Debug;
 use crate::blocks::Document;
 use crate::generators::struct_gen::StructGenerator;
 use crate::generators::{ExternalCrates, Generator, Index, Paths};
+use crate::html_to_markdown::convert_html_to_markdown;
 use crate::Configuration;
 use anyhow::Result;
 use rustdoc_types::{Item, ItemEnum, ItemKind, Module};
@@ -97,7 +98,7 @@ impl<'a> ModuleItems<'a> {
 pub struct ModuleField<'a> {
     pub name: &'a str,
     pub link: String,
-    pub description: &'a str,
+    pub description: String,
 }
 
 impl<'a> ModuleField<'a> {
@@ -112,7 +113,7 @@ impl<'a> ModuleField<'a> {
 
         if !self.description.is_empty() {
             field_string.push_str("\n\t");
-            field_string.push_str(self.description);
+            field_string.push_str(&self.description);
             field_string.push_str("\n");
         }
 
@@ -202,8 +203,11 @@ impl<'a> ModuleGenerator<'a> {
             };
 
             let item_description = match &item.docs {
-                Some(doc) => &doc[..doc.len().min(50)],
-                None => "",
+                Some(doc) => {
+                    let converted_doc = convert_html_to_markdown(doc);
+                    converted_doc[..converted_doc.len().min(50)].to_string()
+                },
+                None => String::new(),
             };
 
             let mut path = format!("{}", path);
@@ -221,7 +225,7 @@ impl<'a> ModuleGenerator<'a> {
                                 self.configuration.default_module_file_name,
                                 self.configuration.default_link_file_extension
                             ),
-                            description: &item_description,
+                            description: item_description.clone(),
                         });
 
                     let new_module_generator = Self::new(
@@ -250,7 +254,7 @@ impl<'a> ModuleGenerator<'a> {
                                 "./struct.{}{}",
                                 item_name, &self.configuration.default_link_file_extension
                             ),
-                            description: &item_description,
+                            description: item_description.clone(),
                         });
 
                     path.push_str("/struct.");
@@ -279,7 +283,7 @@ impl<'a> ModuleGenerator<'a> {
                             "./enum.{}{}",
                             item_name, &self.configuration.default_link_file_extension
                         ),
-                        description: &item_description,
+                        description: item_description.clone(),
                     });
 
                     path.push_str("/enum.");
