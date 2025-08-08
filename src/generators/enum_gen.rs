@@ -1,4 +1,5 @@
 use crate::blocks;
+use crate::html_to_markdown::convert_html_to_markdown;
 use rustdoc_types::{ItemEnum, VariantKind};
 
 use super::{
@@ -28,8 +29,8 @@ impl Generator for EnumGenerator {
             ));
         };
 
-        let mut docs = match &item.docs {
-            Some(docs) => docs.clone(),
+        let docs = match &item.docs {
+            Some(docs) => convert_html_to_markdown(docs),
             None => String::new(),
         };
         let mut variants_section = blocks::ListBlock::new_unordered_list();
@@ -76,9 +77,10 @@ impl Generator for EnumGenerator {
             syntax.push_str(variant_name);
 
             if let Some(variant_doc) = &variant.docs {
+                let converted_doc = convert_html_to_markdown(variant_doc);
                 variants_section.push(
                     blocks::inline::CodeSpan::from(variant_name),
-                    blocks::inline::Text::from(variant_doc),
+                    blocks::inline::Text::from(converted_doc),
                 );
             } else {
                 variants_section.push(
