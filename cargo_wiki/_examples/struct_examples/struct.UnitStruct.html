@@ -261,7 +261,7 @@ class="sourceCode rust"><code class="sourceCode rust"><span id="cb5-1"><a href="
 class="sourceCode rust"><code class="sourceCode rust"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> try_into(<span class="kw">self</span><span class="op">:</span> <span class="dt">Self</span>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>U<span class="op">,</span> <span class="op">&gt;;</span></span></code></pre></div>
 <p><code>impl&lt;T, U&gt; TryFrom&lt;U&gt; for UnitStruct where     U: Into&lt;T&gt;</code></p>
 <div class="sourceCode" id="cb7"><pre
-class="sourceCode rust"><code class="sourceCode rust"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> try_from(value<span class="op">:</span> U) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>T<span class="op">,</span> <span class="op">&gt;;</span></span></code></pre></div>
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> try_from(value<span class="op">:</span> U) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>T<span class="op">,</span> never<span class="op">&gt;;</span></span></code></pre></div>
 <p><code>impl&lt;T&gt; Any for UnitStruct where     T: 'static + ?Sized</code></p>
 <div class="sourceCode" id="cb8"><pre
 class="sourceCode rust"><code class="sourceCode rust"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> type_id(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span>) <span class="op">-&gt;</span> TypeId<span class="op">;</span></span></code></pre></div>
@@ -269,6 +269,7 @@ class="sourceCode rust"><code class="sourceCode rust"><span id="cb8-1"><a href="
 <p><code>impl Send for UnitStruct</code></p>
 <p><code>impl Sync for UnitStruct</code></p>
 <p><code>impl Freeze for UnitStruct</code></p>
+<p><code>impl UnsafeUnpin for UnitStruct</code></p>
 <p><code>impl Unpin for UnitStruct</code></p>
 <p><code>impl UnwindSafe for UnitStruct</code></p>
 <p><code>impl RefUnwindSafe for UnitStruct</code></p>
