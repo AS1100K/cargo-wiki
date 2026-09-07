@@ -1,5 +1,5 @@
 use crate::generators::module_gen::{ModuleContent, ModuleDocumentation, ModuleGenerator};
-use crate::{gen_path, save_file, Configuration, WikiStructure, WIKI_OUTPUT_PATH};
+use crate::{Configuration, WIKI_OUTPUT_PATH, WikiStructure, gen_path, save_file};
 use anyhow::Result;
 use rustdoc_types::Crate;
 

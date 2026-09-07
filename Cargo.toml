@@ -9,14 +9,14 @@ documentation = "https://github.com/as1100k/cargo-wiki"
 keywords = ["markdown", "rustdoc", "cargo"]
 license = "MIT"
 version = "0.0.1"
-edition = "2021"
+edition = "2024"
 
 [features]
 doc_examples = []
 
 [dependencies]
 anyhow = "1"
-clap = { version = "4.5", features = ["derive"] }
-rustdoc-types = "0.35"
+clap = { version = "4.6", features = ["derive"] }
+rustdoc-types = "0.61"
 serde_json = "1"
 dyn-clone = "1"

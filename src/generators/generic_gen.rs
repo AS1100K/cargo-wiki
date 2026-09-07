@@ -1,8 +1,8 @@
 use crate::generators::type_gen::TypeGenerator;
 use anyhow::Result;
 use rustdoc_types::{
-    GenericArg, GenericArgs, GenericBound, GenericParamDef, GenericParamDefKind, Generics, Term,
-    TraitBoundModifier, WherePredicate,
+    GenericArg, GenericArgs, GenericBound, GenericParamDef, GenericParamDefKind, Generics,
+    PreciseCapturingArg, Term, TraitBoundModifier, WherePredicate,
 };
 
 pub struct GenericGenerator;
@@ -181,7 +181,14 @@ impl GenericGenerator {
                     if i != 0 {
                         bound_string.push_str(", ");
                     }
-                    bound_string.push_str(use_);
+
+                    match use_ {
+                        PreciseCapturingArg::Lifetime(l) => {
+                            bound_string.push('\'');
+                            bound_string.push_str(l);
+                        }
+                        PreciseCapturingArg::Param(p) => bound_string.push_str(p),
+                    }
                 }
                 bound_string.push_str(">");
             }
@@ -236,6 +243,10 @@ impl GenericGenerator {
                     generic_arg_string.push_str(" -> ");
                     generic_arg_string.push_str(&TypeGenerator::type_to_string(type_));
                 }
+            }
+            GenericArgs::ReturnTypeNotation => {
+                // TODO: Implement Return Type Notation (Experimental Nightly only feature)
+                generic_arg_string.push_str("/* TODO */");
             }
         }
 
