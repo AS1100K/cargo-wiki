@@ -4,6 +4,7 @@ use crate::blocks::{
     inline::{CodeSpan, Text},
     Document, NLines, RawBlock, Title,
 };
+use crate::html_to_markdown::convert_html_to_markdown;
 
 use super::{fn_gen::FunctionGenerator, generic_gen::GenericGenerator, type_gen::TypeGenerator};
 
@@ -75,9 +76,10 @@ impl ImplsGenerator {
                             if let ItemEnum::Function(function) = &function_item.inner {
                                 let docs = match &function_item.docs {
                                     Some(docs) => {
-                                        if !docs.is_empty() {
+                                        let converted_docs = convert_html_to_markdown(docs);
+                                        if !converted_docs.is_empty() {
                                             let mut new_docs = String::new();
-                                            for line in docs.lines() {
+                                            for line in converted_docs.lines() {
                                                 new_docs.push_str("/// ");
                                                 new_docs.push_str(line);
                                                 new_docs.push_str("\n");

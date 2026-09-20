@@ -5,6 +5,7 @@ use crate::generators::generic_gen::GenericGenerator;
 use crate::generators::type_gen::TypeGenerator;
 use crate::generators::visibility_gen::VisibilityGenerator;
 use crate::generators::{ExternalCrates, Generator, Index, Paths};
+use crate::html_to_markdown::convert_html_to_markdown;
 use crate::Configuration;
 use anyhow::Result;
 use rustdoc_types::{Item, ItemEnum, StructKind};
@@ -28,7 +29,7 @@ impl Generator for StructGenerator {
         }) = &item.inner
         {
             let docs = match &item.docs {
-                Some(docs) => docs.clone(),
+                Some(docs) => convert_html_to_markdown(docs),
                 None => String::new(),
             };
             let mut fields_section = ListBlock::new_unordered_list();
@@ -118,6 +119,7 @@ impl Generator for StructGenerator {
                             syntax.push_str(",\n");
 
                             if let Some(docs) = &field_item.docs {
+                                let converted_docs = convert_html_to_markdown(docs);
                                 fields_section.push(
                                     GroupBlock::new()
                                         .push_c(CodeSpan::from(field_name))
@@ -128,7 +130,7 @@ impl Generator for StructGenerator {
                                             external_crates,
                                             config,
                                         )),
-                                    Text::from(docs),
+                                    Text::from(converted_docs),
                                 );
                             } else {
                                 fields_section.push(

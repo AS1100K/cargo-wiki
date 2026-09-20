@@ -15,6 +15,7 @@ use std::path::Path;
 pub mod _examples;
 pub mod blocks;
 pub mod generators;
+pub mod html_to_markdown;
 pub mod rust_doc;
 pub mod wiki;
 
